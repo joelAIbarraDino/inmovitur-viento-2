@@ -34,5 +34,11 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'openpay' =>[
+        'merchant_id'=>env('OPENPAY_MERCHANT_ID'),
+        'private_key'=> env('OPENPAY_PRIVATE_KEY'),
+        'public_key'=>env('OPENPAY_PUBLIC_KEY'),
+        'conuntry'=>env('OPENPAY_COUNTRY'),
+    ]
 
 ];
