@@ -14,14 +14,14 @@ return new class extends Migration
     {
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_user');
+            $table->unsignedBigInteger('id_client');
             $table->string('original_name');
             $table->string('stored_name');
             $table->enum('type_document', DocumentType::cases())->default(DocumentType::CONTRATO);
             $table->string('path');
             $table->timestamps();
 
-            $table->foreign('id_user')->references('id')->on('clients');
+            $table->foreign('id_client')->references('id')->on('clients');
         });
     }
 
