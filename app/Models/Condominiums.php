@@ -13,4 +13,8 @@ class Condominiums extends Model
         'price',
         'currency'
     ];
+
+    public function payments(){
+        return $this->hasMany(Payments::class, 'id_condominium');
+    }
 }

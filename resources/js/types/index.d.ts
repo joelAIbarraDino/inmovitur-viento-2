@@ -30,7 +30,7 @@ interface TableAttribute {
   key: string
   prefix?: string
   suffix?: string
-  format?: 'currency' | 'date' | 'uppercase' | ((value: any, record?: any) => string)
+  format?: 'currency' | 'date' | 'uppercase' | 'capitalize' | ((value: any, record?: any) => string)
 }
 
 export interface TableAction<T> {
@@ -48,6 +48,11 @@ export interface TableConfig<T>{
     actions: TableAction<T>[];
 }
 
+export interface Enum {
+    label:string;
+    value:string;
+}
+
 export interface User {
     id: number;
     name: string;
@@ -56,6 +61,16 @@ export interface User {
     email_verified_at: string | null;
     created_at: string;
     updated_at: string;
+}
+
+export interface Client {
+    id:number;
+    id_user:number;
+    phone:string;
+    nacionality:string;
+    legal_personality:string;
+    marital_partnership:string;
+    has_nationalTaxID:boolean;
 }
 
 export interface Condominiums{

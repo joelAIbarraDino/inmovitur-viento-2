@@ -2,12 +2,13 @@
 
 import { AppPageProps, BreadcrumbItem, Condominiums, TableConfig } from '@/types';
 import { Pencil, Trash2, CirclePlus, Sheet } from 'lucide-vue-next';
-import { Head, usePage, Link } from '@inertiajs/vue3';
-import { Button } from '@/components/ui/button';
+import { Head, usePage, Link, router } from '@inertiajs/vue3';
 import { computed } from 'vue';
 
 import DinamicTable from '@/components/dinamicTable/DinamicTable.vue';
+import Button from '@/components/ui/button/Button.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
+import Swal from 'sweetalert2';
 
 const breadcrumbs: BreadcrumbItem[] = [{title:'Condominios', href:'/condominiums'}];
 
@@ -19,8 +20,30 @@ const {props} = usePage<CondomimiumsPageProps>();
 const condominiums = computed(()=>props.condominiums);
 
 
-function deleteRecord(record: Condominiums){
+const  deleteRecord = async(record: Condominiums) => {
+    const result = await Swal.fire({
+        title: '¿Estás seguro?',
+        text: "¡No podrás revertir esto!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    });
 
+    if(!result.isConfirmed)return;
+
+    router.delete(`/condominiums/${record.id}`,{
+        preserveScroll:true,
+        onSuccess:()=>{
+            router.visit('/condominiums', {replace:true});
+        },
+        onError:(errors)=>{
+            console.error("Error al eliminar el registro: ", errors);
+            Swal.fire('Error', 'No se pudo eliminar el condominio.', 'error');
+        }
+    });
 }
 
 const table: TableConfig<Condominiums> = {
@@ -33,7 +56,7 @@ const table: TableConfig<Condominiums> = {
             type: 'link',
             tooltip:'Editar condominio',
             icon: Pencil,
-            handle: '/condominiums/{id}'
+            handle: '/condominiums/{id}/edit'
         },
         {
             type: 'button',
@@ -52,15 +75,13 @@ const table: TableConfig<Condominiums> = {
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="px-4 pt-6 flex justify-start items-center gap-3">
-            
-            <Link 
-                class="bg-primary hover:bg-primary-hover text-white flex py-2 px-6 rounded-md gap-2 font-bold"
-                href="/condominiums/create" 
-            >
-                <CirclePlus/> Nuevo condominio
-            </Link>
+            <Button as-child class="bg-primary hover:bg-primary-hover text-white rounded-md gap-2 font-bold" size="lg"> 
+                <Link href="/condominiums/create">
+                    <CirclePlus/> Nuevo condominio
+                </Link>
+            </Button>
         
-            <button class="bg-excel hover:bg-excel-hover text-white flex py-2 px-6 rounded-md gap-2 font-bold">
+            <button class="bg-excel hover:bg-excel-hover text-white flex py-2 px-6 rounded-md gap-2 font-bold text-sm items-center justify-center ">
                 <Sheet/> Cargar excel
             </button>
         </div>

@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\CurrencyType;
+use App\Enums\TowerType;
+use App\Models\Clients;
 use App\Models\Condominiums;
+use App\Models\Payments;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class CondominiumController extends Controller
@@ -23,8 +28,14 @@ class CondominiumController extends Controller
      */
     public function create()
     {
-        return Inertia::render('condominiums/create', [
+        $clients = Clients::all();
+        $currency = CurrencyType::options();
+        $towers = TowerType::options();
 
+        return Inertia::render('condominiums/create', [
+            'clients'=>$clients,
+            'currency'=>$currency,
+            'towers'=>$towers
         ]);
     }
 
@@ -33,7 +44,26 @@ class CondominiumController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'id_client' => 'required|numeric',
+            'tower' => [
+                'required',
+                'string',
+                Rule::unique('condominiums')->where(function ($query) use ($request) {
+                    return $query->where('tower', $request->tower)
+                                ->where('number', $request->number);
+                })
+            ],
+            'number' => 'required|string',
+            'price' => 'required|numeric',
+            'currency' => 'required|string',
+        ], [
+            'tower.unique' => 'Ya existe un condominio con la misma torre y número.',
+        ]);
+
+        Condominiums::create($request->all());
+
+        return redirect()->route('condominiums.index');
     }
 
     /**
@@ -41,9 +71,16 @@ class CondominiumController extends Controller
      */
     public function show(Condominiums $condominium)
     {
+        $clients = Clients::all();
+        $currency = CurrencyType::options();
+        $towers = TowerType::options();
+
         return Inertia::render('condominiums/edit', [
             'showMode'=>true,
-            'condominium'=>$condominium
+            'condominium'=>$condominium,
+            'clients'=>$clients,
+            'currency'=>$currency,
+            'towers'=>$towers
         ]);
     }
 
@@ -52,9 +89,15 @@ class CondominiumController extends Controller
      */
     public function edit(Condominiums $condominium)
     {
+        $clients = Clients::all();
+        $currency = CurrencyType::options();
+        $towers = TowerType::options();
+
         return Inertia::render('condominiums/edit', [
-            'showMode'=>false,
-            'condominium'=>$condominium
+            'condominium'=>$condominium,
+            'clients'=>$clients,
+            'currency'=>$currency,
+            'towers'=>$towers
         ]);
     }
 
@@ -63,14 +106,26 @@ class CondominiumController extends Controller
      */
     public function update(Request $request, Condominiums $condominium)
     {
-        //
+        $request->validate([
+            'price' => 'required|numeric'   
+        ]);
+
+        $condominium->update($request->all());
+
+        return redirect()->route('condominiums.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Condominiums $condominium)
     {
-        //
+        if($condominium->payments()->count() > 0){
+            return redirect()->back()->with('error', 'No se puede eliminar el registro porque tiene elementos relacionados.');
+        }
+
+        $condominium->delete();
+
+        return redirect()->route('condominiums.index');
     }
 }

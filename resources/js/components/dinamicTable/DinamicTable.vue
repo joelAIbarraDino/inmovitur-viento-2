@@ -8,6 +8,12 @@ function getNestedValue(obj: any, path: string) {
   return path.split('.').reduce((acc, key) => acc?.[key], obj);
 }
 
+function capitalize(text:string) {
+  const firstLetter = text.charAt(0);
+  const rest = text.slice(1);
+  return firstLetter.toUpperCase() + rest;
+}
+
 function formatValue(value: any, attr: TableAttribute | string, record: any) {
     if (value == null) return '';
 
@@ -32,6 +38,8 @@ function formatValue(value: any, attr: TableAttribute | string, record: any) {
         formatted = String(value).toUpperCase();
     } else if (typeof attr.format === 'function') {
         formatted = attr.format(value, record);
+    }else if (attr.format === 'capitalize'){
+        formatted = capitalize(value);
     }
 
     return `${attr.prefix ?? ''} ${formatted} ${attr.suffix ?? ''}`;
