@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('condominiums', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger("id_client");
+            $table->unsignedBigInteger("id_client")->nullable();
             $table->enum("tower", TowerType::cases());
             $table->string("number");
             $table->float("price");

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_client');
             $table->unsignedBigInteger('id_condominium');
             $table->float("amount");
+            $table->float("discount_condominium")->default(0);
             $table->enum('currency', CurrencyType::cases());
             $table->timestamps();
 

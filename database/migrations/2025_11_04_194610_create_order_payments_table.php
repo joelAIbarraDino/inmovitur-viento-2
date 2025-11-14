@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_client');
             $table->float('amount');
+            $table->float("discount_condominium")->default(0);
             $table->enum('currency', CurrencyType::cases())->default(CurrencyType::MXN);
             $table->string('provider_id');
             $table->enum('provider', ProvidersType::cases())->default(ProvidersType::openPay);
