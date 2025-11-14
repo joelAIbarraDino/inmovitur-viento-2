@@ -15,4 +15,8 @@ class OrderPayments extends Model
         'clabe',
         'bank_name'
     ];
+
+    public function clients(){
+        return $this->belongsTo(Clients::class, 'id_client');
+    }
 }

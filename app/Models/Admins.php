@@ -11,4 +11,8 @@ class Admins extends Model
         'type_admin',
         'review_docs',
     ];
+
+    public function users(){
+        return $this->belongsTo(User::class, 'id_user');
+    }
 }

@@ -13,4 +13,8 @@ class Documents extends Model
         'type_document',
         'path'
     ];
+
+    public function clients(){
+        return $this->belongsTo(Clients::class, 'id_client');
+    }
 }

@@ -49,4 +49,12 @@ class User extends Authenticatable
             'two_factor_confirmed_at' => 'datetime',
         ];
     }
+
+    public function clients(){
+        return $this->hasMany(Clients::class, 'id_user');
+    }
+
+    public function admins(){
+        return $this->hasMany(Admins::class, 'id_user');
+    }
 }

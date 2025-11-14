@@ -12,4 +12,8 @@ class Payments extends Model
         'amount',
         'currency'
     ];
+
+    public function clients(){
+        return $this->belongsTo(Clients::class, 'id_client');
+    }
 }
