@@ -11,6 +11,7 @@ class Documents extends Model
         'original_name',
         'stored_name',
         'type_document',
+        'status',
         'path'
     ];
 

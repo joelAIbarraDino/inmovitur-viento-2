@@ -23,5 +23,4 @@ enum DocumentType:string
     case ESCRITURA_CONST = 'Escritura constitutiva';
     case INTENCION_FIDEICOMISO = 'Intencion de construccion de fideicomiso';
     case CARTA_PODER = 'Poder representante';
-
 }

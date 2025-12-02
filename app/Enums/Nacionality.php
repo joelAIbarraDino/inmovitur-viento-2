@@ -4,7 +4,7 @@ namespace App\Enums;
 
 enum Nacionality:string
 {
-    case MEXICANA = 'Mexicana';
+        case MEXICANA = 'Mexicana';
     case ESTADOUNIDENSE = 'Estadounidense';
     case ARGENTINA = 'Argentina';
     case BOLIVIANA = 'Boliviana';

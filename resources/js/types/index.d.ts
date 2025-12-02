@@ -26,33 +26,6 @@ export type AppPageProps<
     sidebarOpen: boolean;
 };
 
-interface TableAttribute {
-  key: string
-  prefix?: string
-  suffix?: string
-  format?: 'currency' | 'date' | 'uppercase' | 'capitalize' | ((value: any, record?: any) => string)
-}
-
-export interface TableAction<T> {
-  type: 'link' | 'button';
-  icon: LucideIcon;
-  tooltip?:string;
-  handle: string | ((record: T) => void | Promise<void>);
-}
-
-export interface TableConfig<T>{
-    attributes:(string | TableAttribute)[];
-    columns_name:string[];
-    records:T[];
-    caption?:string;
-    actions: TableAction<T>[];
-}
-
-export interface Enum {
-    label:string;
-    value:string;
-}
-
 export interface User {
     id: number;
     name: string;
@@ -61,26 +34,6 @@ export interface User {
     email_verified_at: string | null;
     created_at: string;
     updated_at: string;
-}
-
-export interface Client {
-    id:number;
-    id_user:number;
-    phone:string;
-    nacionality:string;
-    legal_personality:string;
-    marital_partnership:string;
-    has_nationalTaxID:boolean;
-}
-
-export interface Condominiums{
-    id:number;
-    id_client: number;
-    tower:stringnumber;
-    number:stringnumber;
-    price:number;
-    currency:number;
-    created_at:string;
 }
 
 export type BreadcrumbItemType = BreadcrumbItem;
