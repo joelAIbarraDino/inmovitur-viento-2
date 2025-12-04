@@ -8,4 +8,12 @@ enum DocumentStatus:string
     case REVISION = 'revision';
     case RECHAZADO = 'rechazado';
     case PENDIENTE = 'pendiente';
+
+    public static function options(): array
+    {
+        return array_map(
+            fn($case) => ['value' => $case->value, 'label' => ucfirst($case->value)],
+            self::cases()
+        );
+    }
 }

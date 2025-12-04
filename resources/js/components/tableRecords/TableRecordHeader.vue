@@ -11,7 +11,7 @@ defineProps<{
     <TableCaption>{{caption}}</TableCaption>
     <TableHeader>
         <TableRow>
-            <TableHead v-for="columnName in columnsName" :key="columnName">
+            <TableHead v-for="columnName in columnsName" :key="columnName" class="bg-primary text-white">
                 {{ columnName }}
             </TableHead>
         </TableRow>    

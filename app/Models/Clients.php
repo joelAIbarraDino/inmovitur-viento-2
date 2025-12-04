@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\LegalPersonality;
+use App\Enums\MaritalPartnership;
 use Illuminate\Database\Eloquent\Model;
 
 class Clients extends Model
@@ -14,6 +16,13 @@ class Clients extends Model
         'marital_partnership',
         'has_nationalTaxID',
         'has_CURP',
+    ];
+
+    protected $guarded = ['id_user'];
+
+    protected $casts = [
+        'legal_personality'=>LegalPersonality::class,
+        'marital_partnership'=>MaritalPartnership::class
     ];
     
     public function order_payments(){

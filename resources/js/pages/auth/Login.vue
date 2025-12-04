@@ -97,13 +97,10 @@ defineProps<{
                 </Button>
             </div>
 
-            <!-- <div
-                class="text-center text-sm text-muted-foreground"
-                v-if="canRegister"
-            >
-                Don't have an account?
-                <TextLink :href="register()" :tabindex="5">Sign up</TextLink>
-            </div> -->
+            <div class="text-center text-sm text-muted-foreground">
+                ¿Todavía no estas registrado?
+                <TextLink href="#" :tabindex="5">Completa tu cuenta</TextLink>
+            </div>
         </Form>
     </AuthBase>
 </template>

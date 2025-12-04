@@ -4,7 +4,7 @@ namespace App\Enums;
 
 enum Nacionality:string
 {
-        case MEXICANA = 'Mexicana';
+    case MEXICANA = 'Mexicana';
     case ESTADOUNIDENSE = 'Estadounidense';
     case ARGENTINA = 'Argentina';
     case BOLIVIANA = 'Boliviana';
@@ -45,4 +45,12 @@ enum Nacionality:string
     case SUECA = 'Sueca';
     case SUIZA = 'Suiza';
     case OTRA = 'Otra';
+
+    public static function options(): array
+    {
+        return array_map(
+            fn($case) => ['value' => $case->value, 'label' => ucfirst($case->value)],
+            self::cases()
+        );
+    }
 }

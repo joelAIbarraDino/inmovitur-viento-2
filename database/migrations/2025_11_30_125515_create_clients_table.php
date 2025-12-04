@@ -17,7 +17,7 @@ return new class extends Migration
         Schema::create('clients', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_user');
-            $table->string('no_contract')->nullable();
+            $table->string('no_contract')->unique()->nullable();
             $table->string('phone');
             $table->enum('nacionality', Nacionality::cases())->default(Nacionality::MEXICANA);
             $table->enum('legal_personality', LegalPersonality::cases())->default(LegalPersonality::FISICA);
