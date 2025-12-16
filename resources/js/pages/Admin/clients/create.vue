@@ -8,7 +8,6 @@ import { AppPageProps, BreadcrumbItem, enums } from '@/types';
 import { RecordForm, RecordFormBody, RecordFormHeader, RecordFormSubmit } from '@/components/recordForm';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { computed } from 'vue';
-import { disable } from '@/routes/two-factor';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {title:"Clientes", href:"/clients"},

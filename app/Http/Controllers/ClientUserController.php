@@ -46,7 +46,7 @@ class ClientUserController extends Controller
         $request->validate([
             'no_contract'=>'required|string|max:50|unique:clients,no_contract',
             'name'=>'required|string|max:255',
-            'email'=>'nullable|email|unique:users,email',
+            'email'=>'email|unique:users,email',
             'phone' =>'nullable|digits_between:8,15',
             'legal_personality'=>['required', new Enum(LegalPersonality::class)],
             'marital_partnership'=>['required', new Enum(MaritalPartnership::class)],

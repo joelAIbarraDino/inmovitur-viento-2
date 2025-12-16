@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Clients;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 
 class SupervisorUserController extends Controller
@@ -31,7 +34,21 @@ class SupervisorUserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name'=>'required|string|max:255',
+            'email'=>'email|unique:users,email',
+            'password'=>['required', 'confirmed', Password::default()]
+        ]);
+
+        $user = User::create([
+            'name'=>$request->name,
+            'email'=>$request->email,
+            'password'=>Hash::make($request->password)
+        ]);
+
+        $user->assignRole('supervisor');
+
+        return redirect()->route('supervisors.index');
     }
 
     /**
@@ -45,17 +62,33 @@ class SupervisorUserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $supervisor)
     {
-        //
+        return Inertia::render('Admin/Supervisors/edit', [
+            'supervisor'=>$supervisor,
+            'edit'=>true
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $supervisor)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'password' => ['nullable', 'confirmed', Password::defaults()],
+        ]);
+
+        $supervisor->name = $request->name;
+        
+        if (!empty($request->password)) {
+            $supervisor->password = Hash::make($request->password);
+        }
+
+        $supervisor->save();
+
+        return redirect()->route('supervisors.index');
     }
 
     /**
