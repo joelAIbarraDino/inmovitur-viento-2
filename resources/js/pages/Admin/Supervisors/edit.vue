@@ -83,7 +83,7 @@ function submit(){
                   type="password"
                   class="mt-1 block w-full"
                   v-model="form.password"
-                  placeholder="Correo de usuario"
+                  placeholder="Contraseña de supervisor"
                   :disabled="!edit"
               />
               <InputError class="mt-1" :message="form.errors.password" />
@@ -96,7 +96,7 @@ function submit(){
                   type="password"
                   class="mt-1 block w-full"
                   v-model="form.password_confirmation"
-                  placeholder="Correo de usuario"
+                  placeholder="confirmar contraseña de supervisor"
                   :disabled="!edit"
               />
               <InputError class="mt-1" :message="form.errors.password_confirmation" />

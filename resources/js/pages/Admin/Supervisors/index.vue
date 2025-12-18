@@ -71,14 +71,6 @@ const deleteSupervisor = async(id:number)=>{
                         />
 
                         <TableRecordButton
-                            type="url"
-                            color="bg-orange-600"
-                            hover="bg-orange-800"
-                            :icon=Eye
-                            :action="`/supervisor/${supervisor.id}`"
-                        />
-
-                        <TableRecordButton
                             type="function"
                             color="bg-red-700"
                             hover="bg-red-600"

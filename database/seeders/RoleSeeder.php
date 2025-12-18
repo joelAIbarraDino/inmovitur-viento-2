@@ -36,6 +36,10 @@ class RoleSeeder extends Seeder
             'orderPayment.create',
             'orderPayment.edit',
             'orderPayment.delete',
+
+            'supervisors.create',
+            'supervisors.edit',
+            'supervisors.delete',
         ];
 
         $admin = Role::firstOrCreate(['name'=>'admin']);
