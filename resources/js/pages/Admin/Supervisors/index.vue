@@ -40,10 +40,7 @@ const deleteSupervisor = async(id:number)=>{
     router.delete(`/supervisors/${id}`, {
         preserveScroll:true,
         onSuccess:()=>{
-            Swal.fire('Exito', flash.value.message, 'success');
-        },
-        onError:()=>{
-            Swal.fire('Error', 'No se pudo elimiar el registro', 'error');
+            Swal.fire('Resultado', flash.value.message, 'info');
         }
     });
 };

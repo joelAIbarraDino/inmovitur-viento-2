@@ -14,7 +14,7 @@ import {
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid, UserSearch, User } from 'lucide-vue-next';
+import { BookOpen, Folder, LayoutGrid, UserSearch, User, DoorOpen, CircleDollarSign } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 
 const mainNavItems: NavItem[] = [
@@ -27,6 +27,16 @@ const mainNavItems: NavItem[] = [
         title: 'Clientes',
         href: '/clients',
         icon: User,
+    },
+    {
+        title: 'Condominios',
+        href: '/condominiums',
+        icon: DoorOpen,
+    },
+    {
+        title: 'Pagos',
+        href: '/payments',
+        icon: CircleDollarSign,
     },
     {
         title: 'Supervisores',

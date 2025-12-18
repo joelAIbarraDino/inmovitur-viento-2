@@ -39,6 +39,16 @@ export interface User {
     updated_at: string;
 }
 
+export interface Condominium{
+    id:number;
+    id_client:number;
+    tower:string,
+    number:string,
+    price:number;
+    currency:string;
+    clients?:Client;
+}
+
 export interface Client {
     id:number;
     no_contract:string;

@@ -10,7 +10,7 @@ enum Currency:string
     public static function options(): array
     {
         return array_map(
-            fn($case) => ['value' => $case->value, 'label' => ucfirst($case->value)],
+            fn($case) => ['value' => $case->value, 'label' => strtoupper($case->value)],
             self::cases()
         );
     }
