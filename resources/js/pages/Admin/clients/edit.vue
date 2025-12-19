@@ -4,11 +4,12 @@ import InputError from '@/components/InputError.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { AppPageProps, BreadcrumbItem, Client, enums } from '@/types';
+import { AppPageProps, BreadcrumbItem, Client, Document, enums } from '@/types';
 import { RecordForm, RecordFormBody, RecordFormHeader, RecordFormSubmit } from '@/components/recordForm';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { computed } from 'vue';
 import { LoadingOverlay } from '@/components/overlay';
+import { FileCard } from '@/components/FileCard';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {title:"Clientes", href:"/clients"},
@@ -19,6 +20,7 @@ interface ClientPageProps extends AppPageProps{
     LegalPersonality:enums[];
     MaritalPartnership:enums[];
     client:Client;
+    clientFiles:Document[];
     Nacionality:enums[];
     edit:boolean;
 }
@@ -28,6 +30,7 @@ const MaritalPartnershipArray = computed(() => props.props.MaritalPartnership);
 const LegalPersonalityArray = computed(() => props.props.LegalPersonality);
 const NacionalityArray = computed(() => props.props.Nacionality);
 const client = computed(()=>props.props.client);
+const clientFiles = computed(()=>props.props.clientFiles);
 const edit = computed(()=>props.props.edit);
 
 const form = useForm({
@@ -56,8 +59,7 @@ function submit(){
     <AppLayout :breadcrumbs="breadcrumbs" class="relative">
         <LoadingOverlay :show="form.processing" />
         <RecordForm>
-            <RecordFormHeader v-if="edit" title-form="Editar cliente" return-url="/clients"/>
-            <RecordFormHeader v-else title-form="Ver cliente" return-url="/clients"/>
+            <RecordFormHeader :title-form="client.no_contract??'Sin contrato'" return-url="/clients"/>
             <RecordFormBody  :handle="submit">
 
                 <div class="flex gap-6 flex-col md:flex-row">
@@ -213,5 +215,17 @@ function submit(){
                 <RecordFormSubmit v-if="edit"/>
             </RecordFormBody>
         </RecordForm>
+        
+        <div class="border rounded-md shadow-xl xl:w-1/2 md:w-3/4 w-11/12 mx-auto p-4 mb-6" v-if="clientFiles.length > 0">
+            <span class="text-lg font-black text-left">Documentos del cliente</span>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                <FileCard v-for="clientFile in clientFiles":key="clientFile.id" :status="clientFile.status" :file-url="`/documents/${clientFile.id}`" :file-type="clientFile.type_document"/>
+            </div>
+        </div>
+
+        <div class="border rounded-md shadow-xl xl:w-1/2 md:w-3/4 w-11/12 mx-auto p-4 mb-6 flex items-center justify-center " v-else>
+            <span class="text-lg font-black text-center text-red-800">Este cliente no tiene documentos cargados</span>
+        </div>
+
     </AppLayout>
 </template>

@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\DocumentStatus;
+use App\Enums\DocumentType;
 use App\Enums\LegalPersonality;
 use App\Enums\MaritalPartnership;
 use App\Enums\Nacionality;
 use App\Models\Clients;
+use App\Models\Documents;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -50,6 +53,7 @@ class ClientUserController extends Controller
             'phone' =>'nullable|digits_between:8,15',
             'legal_personality'=>['required', new Enum(LegalPersonality::class)],
             'marital_partnership'=>['required', new Enum(MaritalPartnership::class)],
+            'contract'=>'required|file|mimes:pdf|max:5120',
             'nacionality' => ['required', new Enum(Nacionality::class)],
             'password'=>['required', 'confirmed', Password::default()]
         ]);
@@ -72,6 +76,17 @@ class ClientUserController extends Controller
             $client->nacionality = $request['nacionality'];
             $client->save();
 
+            $path = $request->file('contract')->store("documents","private");
+
+            Documents::create([
+                'id_client' => $client->id,
+                'original_name' => $request->file('contract')->getClientOriginalName(),
+                'stored_name' => basename($path),
+                'type_document' => DocumentType::CONTRATO,
+                'status' => DocumentStatus::ACEPTADO,
+                'path' => $path,
+            ]);
+
         });
         return redirect()->route('clients.index');
     }
@@ -82,6 +97,7 @@ class ClientUserController extends Controller
     public function show(Clients $client)
     {
         return Inertia::render('Admin/clients/edit', [
+            'clientFiles'=>Documents::where('id_client', '=', $client->id)->get(),
             'client'=>$client->load('users'),
             'LegalPersonality'=>LegalPersonality::options(),
             'MaritalPartnership'=>MaritalPartnership::options(),
@@ -95,13 +111,13 @@ class ClientUserController extends Controller
      */
     public function edit(Clients $client)
     {
-
         return Inertia::render('Admin/clients/edit', [
+            'clientFiles'=>Documents::where('id_client', '=', $client->id)->get(),
             'client'=>$client->load('users'),
             'LegalPersonality'=>LegalPersonality::options(),
             'MaritalPartnership'=>MaritalPartnership::options(),
             'Nacionality'=>Nacionality::options(),
-            'edit'=>true
+            'edit'=>true,
         ]);
     }
 

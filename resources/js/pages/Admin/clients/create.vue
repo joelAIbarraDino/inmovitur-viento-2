@@ -36,13 +36,20 @@ const form = useForm({
     nacionality:undefined,
     password:'',
     password_confirmation:'',
+    contract: null
 });
 
+const handleFileChange = (event: { target: { files: null[]; }; }) => {
+  form.contract = event.target.files[0];
+  form.errors.contract = ''; // Limpiar mensaje anterior
+};
+
 function submit(){
-  form.post('/clients',{
-    preserveScroll:true,
-    onSuccess: () => form.reset()
-  })
+    form.post('/clients',{
+        forceFormData:true,
+        preserveScroll:true,
+        onSuccess: () => form.reset()
+    })
 }
 
 </script>
@@ -51,6 +58,7 @@ function submit(){
     <Head title="Nuevo cliente"/>
     <AppLayout :breadcrumbs="breadcrumbs" class="relative">
         <LoadingOverlay :show="form.processing" />
+
         <RecordForm>
             <RecordFormHeader title-form="Nuevo cliente" return-url="/clients"/>
             <RecordFormBody  :handle="submit">
@@ -173,6 +181,17 @@ function submit(){
                     </Select>
 
                     <InputError class="mt-1" :message="form.errors.nacionality" />
+                </div>
+
+                <div class="grid gap-1">
+                    <Label for="contract">Contrato</Label>
+                    <Input
+                        id="contract"
+                        type="file"
+                        accept=".pdf"
+                        @change="handleFileChange"
+                    />
+                    <InputError :message="form.errors.contract" />
                 </div>
 
                 <div class="grid gap-1">

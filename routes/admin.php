@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ClientUserController;
 use App\Http\Controllers\CondominiumController;
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\SupervisorUserController;
 use Illuminate\Support\Facades\Route;
@@ -15,3 +16,8 @@ Route::resource('clients', ClientUserController::class)->middleware('auth', 'ver
 Route::resource('supervisors', SupervisorUserController::class)->middleware('auth', 'verified');
 Route::resource('condominiums', CondominiumController::class)->middleware('auth', 'verified');
 Route::resource('payments', PaymentController::class)->middleware('auth', 'verified');
+
+Route::middleware('auth', 'verified')->group(function(){
+    Route::get('/documents/{document}', [DocumentController::class, 'show'])->name('documents.show');
+     Route::get('/documents/{document}/stream', [DocumentController::class, 'stream'])->name('documents.stream');
+});

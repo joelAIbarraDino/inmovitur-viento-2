@@ -73,6 +73,16 @@ export interface Payment {
     created_at:string;
 }
 
+export interface Document {
+    id:number;
+    id_client:number;
+    original_name:string;
+    stored_name: string;
+    type_document:string;
+    status:string;
+    path:string;
+    clients:Client;
+}
 export interface enums{
     value:string;
     label:string;
