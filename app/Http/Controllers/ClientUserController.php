@@ -151,6 +151,14 @@ class ClientUserController extends Controller
             return redirect()->route('clients.index')->with('message', 'El cliente tiene un condominio registrado');
         }
 
+        if($client->documents()->count() > 0){
+            return redirect()->route('clients.index')->with('message', 'El cliente tiene un documentos cargados');
+        }
+
+        if($client->order_payments()->count() > 0){
+            return redirect()->route('clients.index')->with('message', 'El cliente tiene un ordenes de pago registrados');
+        }
+
         DB::transaction(function() use($client){
             $id_user = $client->id_user;
 

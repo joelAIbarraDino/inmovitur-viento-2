@@ -6,9 +6,7 @@ use App\Enums\Currency;
 use App\Enums\Tower;
 use App\Models\Clients;
 use App\Models\Condominiums;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 use Inertia\Inertia;
 
@@ -111,8 +109,8 @@ class CondominiumController extends Controller
         if($condominium->payments()->count() > 0)
             return redirect()->route('condominiums.index')->with('message', 'el condominio tiene pagos registrados');
         
-        if($condominium->clients()->count() > 0)
-            return redirect()->route('condominiums.index')->with('message', 'el condominio tiene un cliente asignado');
+        // if($condominium->clients()->count() > 0)
+        //     return redirect()->route('condominiums.index')->with('message', 'el condominio tiene un cliente asignado');
         
         $condominium->delete();
 

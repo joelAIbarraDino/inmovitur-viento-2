@@ -29,10 +29,6 @@ class Clients extends Model
         return $this->hasMany(OrderPayments::class, 'id_client');
     }
 
-    public function payments(){
-        return $this->hasMany(Payments::class, 'id_client');
-    }
-
     public function documents(){
         return $this->hasMany(Documents::class, 'id_client');
     }

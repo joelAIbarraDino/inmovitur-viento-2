@@ -63,6 +63,16 @@ export interface Client {
     users?:User;
 }
 
+export interface Payment {
+    id:number;
+    id_condominium:number;
+    amount:number;
+    discount_condominium:number;
+    currency:string;
+    condominiums?:Condominium;
+    created_at:string;
+}
+
 export interface enums{
     value:string;
     label:string;

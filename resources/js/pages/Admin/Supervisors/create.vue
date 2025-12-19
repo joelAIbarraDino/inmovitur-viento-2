@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { BreadcrumbItem } from '@/types';
 import { RecordForm, RecordFormBody, RecordFormHeader, RecordFormSubmit } from '@/components/recordForm';
+import { LoadingOverlay } from '@/components/overlay';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {title:"Supervisores", href:"/supervisors"},
@@ -31,7 +32,8 @@ function submit(){
 
 <template>
     <Head title="Nuevo administrador"/>
-    <AppLayout :breadcrumbs="breadcrumbs">
+    <AppLayout :breadcrumbs="breadcrumbs" class="relative">
+      <LoadingOverlay :show="form.processing" />
       <RecordForm>
         <RecordFormHeader title-form="Nuevo supervisor" return-url="/supervisors"/>
         <RecordFormBody  :handle="submit">

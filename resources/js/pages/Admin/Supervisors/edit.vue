@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { AppPageProps, BreadcrumbItem, User } from '@/types';
 import { RecordForm, RecordFormBody, RecordFormHeader, RecordFormSubmit } from '@/components/recordForm';
 import { computed } from 'vue';
+import { LoadingOverlay } from '@/components/overlay';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {title:"Supervisores", href:"/supervisors"},
@@ -40,70 +41,71 @@ function submit(){
 
 <template>
     <Head title="Editar supervisor"/>
-    <AppLayout :breadcrumbs="breadcrumbs">
-      <RecordForm>
-        <RecordFormHeader v-if="edit" title-form="Editar supervisor" return-url="/supervisors"/>
-        <RecordFormHeader v-else title-form="Ver supervisor" return-url="/supervisors"/>
-        <RecordFormBody  :handle="submit">
+    <AppLayout :breadcrumbs="breadcrumbs" class="relative">
+        <LoadingOverlay :show="form.processing" />
+        <RecordForm>
+            <RecordFormHeader v-if="edit" title-form="Editar supervisor" return-url="/supervisors"/>
+            <RecordFormHeader v-else title-form="Ver supervisor" return-url="/supervisors"/>
+            <RecordFormBody  :handle="submit">
 
-            <div class="flex gap-6 flex-col md:flex-row">
-                <div class="flex-1 grid gap-1">
-                    <Label for="name">Nombre</Label>
-                    <Input
-                        id="name"
-                        type="text"
-                        class="mt-1 block w-full"
-                        v-model="form.name"
-                        placeholder="Nombre del administrador"
-                        :disabled="!edit"
-                    />
-                    <InputError class="mt-1" :message="form.errors.name" />
+                <div class="flex gap-6 flex-col md:flex-row">
+                    <div class="flex-1 grid gap-1">
+                        <Label for="name">Nombre</Label>
+                        <Input
+                            id="name"
+                            type="text"
+                            class="mt-1 block w-full"
+                            v-model="form.name"
+                            placeholder="Nombre del administrador"
+                            :disabled="!edit"
+                        />
+                        <InputError class="mt-1" :message="form.errors.name" />
+                    </div>
                 </div>
-            </div>
 
-            <div class="flex gap-6 flex-col md:flex-row">
-                <div class="flex-1 grid gap-1">
-                    <Label for="email">Correo</Label>
-                    <Input
-                        id="email"
-                        type="email"
-                        class="mt-1 block w-full"
-                        v-model="form.email"
-                        placeholder="Correo de administrador"
-                        disabled="true"
-                    />
-                    <InputError class="mt-1" :message="form.errors.email" />
+                <div class="flex gap-6 flex-col md:flex-row">
+                    <div class="flex-1 grid gap-1">
+                        <Label for="email">Correo</Label>
+                        <Input
+                            id="email"
+                            type="email"
+                            class="mt-1 block w-full"
+                            v-model="form.email"
+                            placeholder="Correo de administrador"
+                            disabled="true"
+                        />
+                        <InputError class="mt-1" :message="form.errors.email" />
+                    </div>
                 </div>
-            </div>
 
-            <div class="grid gap-1" v-if="edit">
-              <Label for="password">Contraseña</Label>
-              <Input
-                  id="password"
-                  type="password"
-                  class="mt-1 block w-full"
-                  v-model="form.password"
-                  placeholder="Contraseña de supervisor"
-                  :disabled="!edit"
-              />
-              <InputError class="mt-1" :message="form.errors.password" />
-            </div>
+                <div class="grid gap-1" v-if="edit">
+                <Label for="password">Contraseña</Label>
+                <Input
+                    id="password"
+                    type="password"
+                    class="mt-1 block w-full"
+                    v-model="form.password"
+                    placeholder="Contraseña de supervisor"
+                    :disabled="!edit"
+                />
+                <InputError class="mt-1" :message="form.errors.password" />
+                </div>
 
-            <div class="grid gap-1" v-if="edit">
-              <Label for="password_confirmation">Confirmar contraseña</Label>
-              <Input
-                  id="password_confirmation"
-                  type="password"
-                  class="mt-1 block w-full"
-                  v-model="form.password_confirmation"
-                  placeholder="confirmar contraseña de supervisor"
-                  :disabled="!edit"
-              />
-              <InputError class="mt-1" :message="form.errors.password_confirmation" />
-            </div>
+                <div class="grid gap-1" v-if="edit">
+                <Label for="password_confirmation">Confirmar contraseña</Label>
+                <Input
+                    id="password_confirmation"
+                    type="password"
+                    class="mt-1 block w-full"
+                    v-model="form.password_confirmation"
+                    placeholder="confirmar contraseña de supervisor"
+                    :disabled="!edit"
+                />
+                <InputError class="mt-1" :message="form.errors.password_confirmation" />
+                </div>
 
-            <RecordFormSubmit/>
-        </RecordFormBody>
-      </RecordForm>
+                <RecordFormSubmit/>
+            </RecordFormBody>
+        </RecordForm>
     </AppLayout>
 </template>
