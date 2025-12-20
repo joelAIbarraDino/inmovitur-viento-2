@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { AppPageProps, BreadcrumbItem, Document } from '@/types';
-import { Button } from '@/components/ui/button';
-import { Head, usePage } from '@inertiajs/vue3';
-import AppLayout from '@/layouts/AppLayout.vue';
+import { Head, router, usePage } from '@inertiajs/vue3';
 import { ArrowLeft } from 'lucide-vue-next';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
+    
+import LoadingOverlay from '@/components/overlay/LoadingOverlay.vue';
+import Button from '@/components/ui/button/Button.vue';
+import AppLayout from '@/layouts/AppLayout.vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {title:"Clientes", href:"/clients"},
@@ -18,14 +20,33 @@ interface supervisorPagePropos extends AppPageProps{
 
 const props = usePage<supervisorPagePropos>();
 
+const isProcessing = ref(false);
 const document = computed(()=>props.props.document);
 const streamURL = computed(()=>props.props.streamURL);
+
+function updateStatus(status:string){
+    router.patch(
+        `/documents/${document.value.id}/status`,
+        {status},
+        {
+            preserveScroll:true,
+            onStart: () => {
+                isProcessing.value = true;
+            },
+            onFinish: () => {
+                isProcessing.value = false;
+            }
+
+        }
+    );
+}
 
 </script>
 
 <template>
     <Head title="Ver documento"/>
-    <AppLayout :breadcrumbs="breadcrumbs">
+    <AppLayout :breadcrumbs="breadcrumbs" class="relative">
+        <LoadingOverlay :show="isProcessing" />
         <div class="flex flex-1 flex-col gap-4 p-4 xl:w-1/2  md:w-3/4 w-11/12 mx-auto my-10 border rounded-md shadow-xl">
             <div class="flex justify-between items-center  gap-2 flex-row">
                 <span class="text-primary font-bold text-xl md:text-4xl">{{ document.type_document }}</span>
@@ -34,7 +55,9 @@ const streamURL = computed(()=>props.props.streamURL);
             <div>
                 <p><span class="text-primary font-bold">Cliente: </span>{{ document.clients.users?.name??'Sin nombre' }}</p>
                 <p><span class="text-primary font-bold">Contrato: </span>{{ document.clients.no_contract??'Sin contrato' }}</p>
-                <Button class="bg-primary hover:bg-cyan-700 dark:text-white mt-4">Aceptar documento</Button>
+                
+                <Button class="bg-primary mt-2" v-if="document.type_document!='Contrato' && document.status === 'aceptado'" @click="updateStatus('rechazado')">Solicitar nuevamente</Button>
+                <Button class="mt-2 bg-amber-500 hover:bg-amber-600" v-else-if="document.type_document!='Contrato' && document.status === 'revision' || document.status === 'rechazado' || document.status === 'pendiente'" @click="updateStatus('aceptado')">Aceptar Documento</Button>
             </div>
             <iframe
                 :src="streamURL"

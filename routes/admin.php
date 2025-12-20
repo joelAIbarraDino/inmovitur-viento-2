@@ -19,5 +19,6 @@ Route::resource('payments', PaymentController::class)->middleware('auth', 'verif
 
 Route::middleware('auth', 'verified')->group(function(){
     Route::get('/documents/{document}', [DocumentController::class, 'show'])->name('documents.show');
-     Route::get('/documents/{document}/stream', [DocumentController::class, 'stream'])->name('documents.stream');
+    Route::get('/documents/{document}/stream', [DocumentController::class, 'stream'])->name('documents.stream');
+    Route::patch('/documents/{document}/status', [DocumentController::class, 'updateStatus'])->name('document.update-status');
 });
