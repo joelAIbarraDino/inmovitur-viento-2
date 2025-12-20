@@ -25,9 +25,9 @@ defineProps<{
 
         <div class="lg:p-8">
             <div class="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-                <div class="flex flex-col space-y-2 text-center">
-                    <h1 class="text-xl font-medium tracking-tight" v-if="title">{{ title }}</h1>
-                    <p class="text-sm text-muted-foreground" v-if="description">{{ description }}</p>
+                <div class="flex flex-col space-y-4 text-center">
+                    <h1 class="text-3xl font-medium tracking-tight" v-if="title">{{ title }}</h1>
+                    <p class="text-md text-muted-foreground" v-if="description">{{ description }}</p>
                 </div>
                 <slot />
             </div>

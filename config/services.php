@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'banxico' => [
+        'token' =>env('API_KEY_BANXICO'),
+    ],
+
 ];
