@@ -1,7 +1,7 @@
 <script setup>
 import ChartDataCard from './ChartDataCard.vue';
 import DountChart from './DountChart.vue';
-import { Receipt, CircleDollarSign } from 'lucide-vue-next';
+import { Receipt, CircleDollarSign, TrendingDown } from 'lucide-vue-next';
 
 
 const props = defineProps({
@@ -24,7 +24,8 @@ const props = defineProps({
     <div class="space-y-4 text-center">
         <ChartDataCard bgColor="bg-primary" label="Por cobrar" :data="`$ ${porCobrar.toLocaleString()}`" :icon="Receipt"/>
         <ChartDataCard bgColor="bg-secondary" label="Cobrado" :data="`$ ${cobrados.toLocaleString()}`" :icon="CircleDollarSign"/>
-        <a class="text-lg font-bold underline text-center" href="#">Ver más</a>
+        <ChartDataCard bgColor="bg-orange-700" label="Penas" :data="`$ ${cobrados.toLocaleString()}`" :icon="TrendingDown"/>
+        <a class="text-lg font-bold underline text-center" href="/towers">Ver más</a>
 
     </div>
 
