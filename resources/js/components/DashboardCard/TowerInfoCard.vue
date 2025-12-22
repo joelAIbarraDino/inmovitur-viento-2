@@ -26,7 +26,7 @@ const props = defineProps<{
 
     <div class="flex flex-col md:flex-row gap-4">
         <div class="border border-primary rounded-sm p-4 w-full md:w-1/3 space-y-4">
-            <p class="text-xl font-bold mb-2 text-primary dark:text-secondary">Información de departamentos</p>
+            <p class="text-xl font-bold mb-2 text-primary dark:text-white">Información de departamentos</p>
             <ChartDataCard bg-color="bg-green-700" label="Valor de torre" :data="`$ ${props.data.towerValue.toLocaleString()} ${props.data.currency.toUpperCase()}`" :icon="Hotel"/>
             <ChartDataCard bg-color="bg-cyan-400" label="Condominios" :data="props.data.condominiums.toString()" :icon="DoorOpen"/>
             <ChartDataCard bg-color="bg-cyan-400" label="Departamentos vendidos" :data="props.data.soldCondominiums.toString()" :icon="Receipt"/>
@@ -34,7 +34,7 @@ const props = defineProps<{
         </div>
 
         <div class="border border-primary rounded-sm p-4 w-full md:w-2/3 space-y-4">
-            <p class="text-xl font-bold mb-2 text-primary dark:text-secondary">Información de ventas</p>
+            <p class="text-xl font-bold mb-2 text-primary dark:text-white">Información de ventas</p>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <ChartDataCard bg-color="bg-primary" label="Cobrado" :data="`$ ${props.data.charged.toLocaleString()} ${props.data.currency.toUpperCase()}`" :icon="DollarSign"/>
                 <ChartDataCard bg-color="bg-secondary" label="Por cobrar" :data="`$ ${props.data.pending.toLocaleString()} ${props.data.currency.toUpperCase()}`" :icon="Receipt"/>

@@ -60,7 +60,7 @@ const options: ChartOptions<'bar'> = {
 
 <template>
     <div class="h-10 w-full mb-15 mt-5">
-        <p class="text-xl font-bold text-primary dark:text-secondary mb-2">{{ props.label }}</p>
+        <p class="text-xl font-bold text-primary dark:text-white mb-2">{{ props.label }}</p>
         <Bar :data="data" :options="options" />
     </div>
 </template>
