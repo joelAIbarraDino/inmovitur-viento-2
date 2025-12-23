@@ -39,4 +39,13 @@ return [
         'token' =>env('API_KEY_BANXICO'),
     ],
 
+    'openpay' => [
+        'merchant_id' => env('OPENPAY_MERCHANT_ID'),
+        'private_key' => env('OPENPAY_PRIVATE_KEY'),
+        'public_key' => env('OPENPAY_PUBLIC_KEY'),
+        'public_ip' => env('OPENPAY_PUBLIC_IP'),
+        'production' => env('OPENPAY_PRODUCTION'),
+        'base_url' => env('OPENPAY_BASE_URL'),
+    ],
+
 ];

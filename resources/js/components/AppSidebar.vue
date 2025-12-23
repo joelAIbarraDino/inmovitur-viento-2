@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import NavFooter from '@/components/NavFooter.vue';
 import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
 import {
@@ -13,9 +12,21 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid, UserSearch, User, DoorOpen, CircleDollarSign, Hotel } from 'lucide-vue-next';
+import { LayoutGrid, UserSearch, User, DoorOpen, CircleDollarSign, Hotel, Files, Landmark } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
+import { usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
+
+const page = usePage();
+
+const isAdmin = computed(() => {
+    const user = page.props.auth?.user;
+    return user && user.roles && user.roles.length > 0
+        ? user.roles[0].name === 'admin'
+        : false;
+});
+
+console.log(isAdmin.value);
 
 const mainNavItems: NavItem[] = [
     {
@@ -43,6 +54,12 @@ const mainNavItems: NavItem[] = [
         href: '/payments',
         icon: CircleDollarSign,
     },
+
+    {
+        title: 'Ordenes de pagos',
+        href: '/order-payments',
+        icon: CircleDollarSign,
+    },
     {
         title: 'Supervisores',
         href: '/supervisors',
@@ -50,18 +67,24 @@ const mainNavItems: NavItem[] = [
     },
 ];
 
-const footerNavItems: NavItem[] = [
+const mainNavItemsClient: NavItem[] = [
     {
-        title: 'Github Repo',
-        href: 'https://github.com/laravel/vue-starter-kit',
-        icon: Folder,
+        title: 'Mi panel',
+        href: '/my-account',
+        icon: LayoutGrid,
     },
     {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#vue',
-        icon: BookOpen,
+        title: 'Documentos',
+        href: '/upload-files',
+        icon: Files,
+    },
+    {
+        title: 'Pagos',
+        href: '/client-payments',
+        icon: Landmark,
     },
 ];
+
 </script>
 
 <template>
@@ -77,11 +100,11 @@ const footerNavItems: NavItem[] = [
         </SidebarHeader>
 
         <SidebarContent>
-            <NavMain :items="mainNavItems" />
+            <NavMain v-if="isAdmin" :items="mainNavItems" />
+            <NavMain v-else :items="mainNavItemsClient" />
         </SidebarContent>
 
         <SidebarFooter>
-            <!-- <NavFooter :items="footerNavItems" /> -->
             <NavUser />
         </SidebarFooter>
     </Sidebar>

@@ -9,11 +9,13 @@ class OrderPayments extends Model
     protected $fillable = [
         'id_client',
         'amount',
+        'discount_condominium',
         'currency',
-        'provider_id',
-        'customer_reference',
+        'url_spei',
         'clabe',
-        'bank_name'
+        'bank_name',
+        'order_id',
+        'status',
     ];
 
     public function clients(){

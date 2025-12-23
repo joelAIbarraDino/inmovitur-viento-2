@@ -42,6 +42,8 @@ export interface User {
     email_verified_at: string | null;
     created_at: string;
     updated_at: string;
+
+    roles: Role[];
 }
 
 export interface Condominium{
@@ -86,8 +88,24 @@ export interface Document {
     type_document:string;
     status:string;
     path:string;
-    clients:Client;
+    clients?:Client;
 }
+
+export interface OrderPayment {
+    id:number;
+    id_client:number;
+    amount:number;
+    discount_condominium:number;
+    currency:string;
+    url_spei:string;
+    clabe:string;
+    bank_name:string;
+    order_id:string;
+    status:string;
+    created_at:string;
+    clients?:Client;
+}
+
 export interface enums{
     value:string;
     label:string;

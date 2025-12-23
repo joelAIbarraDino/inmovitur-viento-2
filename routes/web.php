@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\CurrencyController;
+use App\Http\Controllers\OpenPayController;
+use App\Http\Controllers\OrderPaymentsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {

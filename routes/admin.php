@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\SupervisorUserController;
+use App\Http\Controllers\OrderPaymentsController;
 use App\Http\Controllers\CondominiumController;
 use App\Http\Controllers\ClientUserController;
 use App\Http\Controllers\DashboardController;
@@ -15,6 +16,7 @@ Route::resource('clients', ClientUserController::class)->middleware('auth', 'ver
 Route::resource('supervisors', SupervisorUserController::class)->middleware('auth', 'verified');
 Route::resource('condominiums', CondominiumController::class)->middleware('auth', 'verified');
 Route::resource('payments', PaymentController::class)->middleware('auth', 'verified');
+Route::resource('order-payments', OrderPaymentsController::class)->middleware('auth', 'verified');
 
 Route::middleware('auth', 'verified')->group(function(){
     //rutas para control de documentos
