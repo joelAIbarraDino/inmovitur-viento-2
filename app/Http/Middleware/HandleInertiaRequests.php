@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Badge;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -49,6 +50,16 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'message' => fn () => $request->session()->get('message')
             ],
+            'exchange' => function () {
+                $badge = Badge::latest('created_at')->first(['rate', 'created_at']);
+
+
+                return $badge ? [
+                    'rate'   => (float) $badge->rate,
+                    'created_at' => $badge->created_at
+                ] : null;
+            },
+            'currency'=>$request->cookie('preferred_currency', 'MXN'),
         ];
     }
 }

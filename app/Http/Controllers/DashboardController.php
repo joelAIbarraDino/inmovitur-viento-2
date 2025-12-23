@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Currency;
-use App\Models\Badge;
 use App\Models\Condominiums;
 use Illuminate\Http\Request;
+use App\Enums\Currency;
+use App\Models\Badge;
 use Inertia\Inertia;
 
-class TowerController extends Controller
+class DashboardController extends Controller
 {
-    public function towerInformation(Request $request){
+    public function dashboard(Request $request){
 
         $targetCurrency = $request->cookie('preferred_currency', 'usd');
 
@@ -67,10 +67,9 @@ class TowerController extends Controller
             })
             ->values();
 
-        return Inertia::render('Admin/towerInformation/towerInformation', [
-            'towers'=>$towers
+        return Inertia::render('Dashboard', [
+            'towers' => $towers,
         ]);
-        
     }
 
     private function convertCurrency($amount, $from, $to, $rate): float {

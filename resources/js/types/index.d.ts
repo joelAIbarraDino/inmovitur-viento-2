@@ -27,6 +27,11 @@ export type AppPageProps<
     flash: {
         message: string;
     };
+    exchange: {
+        rate:number;
+        created_at:string;
+    };
+    currency:string;
 };
 
 export interface User {
@@ -91,6 +96,20 @@ export interface enums{
 export interface messages{
     success?:string;
     error?:string;
+}
+
+export interface DataTowers{
+    towerName: string;
+    towerValue: number;
+    condominiums: number;
+    soldCondominiums: number;
+    condominiumsToSell: number;
+    charged: number;
+    pending: number;
+    sold: number;
+    inventory: number;
+    penality: number;
+    currency: string;
 }
 
 export type BreadcrumbItemType = BreadcrumbItem;

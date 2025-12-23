@@ -1,17 +1,15 @@
 <?php
 
-use App\Http\Controllers\ClientUserController;
+use App\Http\Controllers\SupervisorUserController;
 use App\Http\Controllers\CondominiumController;
+use App\Http\Controllers\ClientUserController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\PaymentController;
-use App\Http\Controllers\SupervisorUserController;
 use App\Http\Controllers\TowerController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-Route::get('dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('dashboard', [DashboardController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::resource('clients', ClientUserController::class)->middleware('auth', 'verified');
 Route::resource('supervisors', SupervisorUserController::class)->middleware('auth', 'verified');
