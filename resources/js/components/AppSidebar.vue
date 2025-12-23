@@ -78,11 +78,6 @@ const mainNavItemsClient: NavItem[] = [
         href: '/upload-files',
         icon: Files,
     },
-    {
-        title: 'Pagos',
-        href: '/client-payments',
-        icon: Landmark,
-    },
 ];
 
 </script>

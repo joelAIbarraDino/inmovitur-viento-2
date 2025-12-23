@@ -10,6 +10,7 @@ const props = defineProps({
   pending: Number,
   penality: Number,
   currency:String,
+  isAdmin:Boolean,
 })
 </script>
 
@@ -27,7 +28,7 @@ const props = defineProps({
         <ChartDataCard bgColor="bg-primary" label="Cobrado" :data="`$ ${charged.toLocaleString()} ${currency.toUpperCase()}`" :icon="Receipt"/>
         <ChartDataCard bgColor="bg-secondary" label="Por cobrar" :data="`$ ${pending.toLocaleString()} ${currency.toUpperCase()}`" :icon="CircleDollarSign"/>
         <ChartDataCard bgColor="bg-orange-700" label="Penas" :data="`$ ${penality.toLocaleString()} ${currency.toUpperCase()}`" :icon="TrendingDown"/>
-        <a class="text-lg font-bold underline text-center" href="/towers">Ver más</a>
+        <a v-if="isAdmin" class="text-lg font-bold underline text-center" href="/towers">Ver más</a>
 
     </div>
 

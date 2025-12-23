@@ -14,9 +14,12 @@ class AfterLoginController extends Controller
         if(!$user)
             return redirect()->route('login');
 
-        if($user->hasRole('admin') || $user->hasRole('supervisor'))
-            return redirect()->route('dashboard');
+        if($user->hasRole('admin'))
+            return redirect()->intended(route('dashboard'));
 
-        return redirect()->route('client');
+        if($user->hasRole('supervisor'))
+            return redirect()->intended(route('dashboard'));
+
+        return redirect()->intended(route('client.index'));
     }
 }

@@ -11,7 +11,7 @@ const props = defineProps<{
 </script>
 
 <template>
-    <div class="relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border md:min-h-min shadow-xl" >
+    <div class="relative flex-1 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border md:min-h-min shadow-xl" >
         <Table>
             <TableRecordHeader :caption="props.caption??'Lista de registros'" :columns-name="props.columnsHead"></TableRecordHeader>
             <TableBody>

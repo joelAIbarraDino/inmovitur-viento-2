@@ -14,16 +14,11 @@ use Inertia\Inertia;
 class OrderPaymentsController extends Controller
 {
 
-    public function test(){
-        $response = $this->generatePaymentOrder("Joel Alejandro Ibarra Villar", "joelvillar35@gmail.com", "5514127503", "100000", "pago de condominio", "contract-01");
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-
         return Inertia::render('Admin/orderPayment/index', [
             'orderPayments' => OrderPayments::with('clients.users')->get()
         ]);
@@ -58,7 +53,7 @@ class OrderPaymentsController extends Controller
             $client->users->email, 
             $client->phone, 
             $request->amount,
-            'Pago de condominio',
+            'Pago de condominio #'.$condominium->number,
             $client->no_contract
         );
 
