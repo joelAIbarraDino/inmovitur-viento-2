@@ -24,8 +24,8 @@ const props = defineProps({
     />
 
     <div class="space-y-4 text-center">
-        <ChartDataCard bgColor="bg-primary" label="Por cobrar" :data="`$ ${charged.toLocaleString()} ${currency.toUpperCase()}`" :icon="Receipt"/>
-        <ChartDataCard bgColor="bg-secondary" label="Cobrado" :data="`$ ${pending.toLocaleString()} ${currency.toUpperCase()}`" :icon="CircleDollarSign"/>
+        <ChartDataCard bgColor="bg-primary" label="Cobrado" :data="`$ ${charged.toLocaleString()} ${currency.toUpperCase()}`" :icon="Receipt"/>
+        <ChartDataCard bgColor="bg-secondary" label="Por cobrar" :data="`$ ${pending.toLocaleString()} ${currency.toUpperCase()}`" :icon="CircleDollarSign"/>
         <ChartDataCard bgColor="bg-orange-700" label="Penas" :data="`$ ${penality.toLocaleString()} ${currency.toUpperCase()}`" :icon="TrendingDown"/>
         <a class="text-lg font-bold underline text-center" href="/towers">Ver más</a>
 
