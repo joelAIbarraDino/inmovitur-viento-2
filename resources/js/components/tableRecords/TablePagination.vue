@@ -16,21 +16,14 @@ const props = defineProps<{
 
 <template>
     <div class="flex flex-wrap items-center justify-end space-x-1 mt-2 mb-4">
-
         <Link
-            as="a"
             v-for="(link, index) in props.links":key="index"
-            :href="link.url??'#'"
-            :enabled="link.url ? false:true"
+            :href="link.url||'#'"
             v-html="link.label"
             :class="[
                 link.active ? 'bg-primary text-white':'bg-white text-gray-700',
-                link.url ? 'opacity-50 pointer-events-none':'hover:bg-gray-100',
-                'py-2 px-4'
+                'py-2 px-4 hover:bg-gray-100 hover:text-gray-700'
             ]"
         />
-        
-        
-
     </div>
 </template>

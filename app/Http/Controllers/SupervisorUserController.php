@@ -17,7 +17,7 @@ class SupervisorUserController extends Controller
     public function index()
     {
         return Inertia::render('Admin/Supervisors/index', [
-            'supervisors'=>User::role('supervisor')->get()
+            'supervisors'=>User::role('supervisor')->paginate(10),
         ]);
     }
 
