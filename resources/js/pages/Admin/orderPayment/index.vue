@@ -13,7 +13,7 @@ import { computed } from 'vue';
 import Swal from 'sweetalert2';
 
 const breadcrumbs: BreadcrumbItem[] = [{title:'Pagos', href:'#'}]
-const columnsName = ['Cliente', 'Monto', 'Monto', 'Pena', 'status', 'Fecha'];
+const columnsName = ['Cliente', 'Monto', 'Pena', 'status', 'Fecha'];
 
 interface CondominiumsPageProps extends AppPageProps{
     orderPayments:OrderPayment[];
