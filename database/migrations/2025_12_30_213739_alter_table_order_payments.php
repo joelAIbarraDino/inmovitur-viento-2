@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('order_payments', function(Blueprint $table){
-            $table->integer('id_condomimium')->after('id_client');
+            $table->integer('id_condominium')->after('id_client');
 
         });    
     }
@@ -23,7 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('order_payments', function(Blueprint $table){
-            $table->dropColumn('id_condomimium');
+            $table->dropColumn('id_condominium');
         });
     }
 };
