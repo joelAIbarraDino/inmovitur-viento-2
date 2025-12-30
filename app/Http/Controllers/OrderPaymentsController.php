@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Currency;
 use App\Enums\PaymentStatus;
 use App\Models\Clients;
 use App\Models\Condominiums;
@@ -50,39 +51,43 @@ class OrderPaymentsController extends Controller
         $condominium = Condominiums::find($request->id_condominium);
         $client = Clients::find($condominium->id_client)->load('users');
 
-        $response = $this->generatePaymentOrder(
-            $client->users->name, 
-            $client->users->email, 
-            $client->phone, 
-            $request->amount,
-            'Pago de condominio #'.$condominium->number,
-            $client->no_contract
-        );
+        if(Currency::from($condominium->currency) == Currency::MXN){
+            $response = $this->generateOpenPayOrder(
+                $client->users->name, 
+                $client->users->email, 
+                $client->phone, 
+                $request->amount,
+                'Pago de condominio #'.$condominium->number,
+                $client->no_contract
+            );
 
-        $clabe = $response['payment_method']['clabe'];
-        $banco = $response['payment_method']['bank'];
-        $urlSPEI = $response['payment_method']['url_spei'];
+            $clabe = $response['payment_method']['clabe'];
+            $banco = $response['payment_method']['bank'];
+            $urlSPEI = $response['payment_method']['url_spei'];
 
-        $orderID = $response['order_id'];
+            $orderID = $response['order_id'];
 
-        OrderPayments::create([
-            'id_client'=>$client->id,
-            'id_condominium'=>$condominium->id,
-            'amount'=>$request->amount,
-            'discount_condominium'=>$request->discount_condominium,
-            'currency'=>$condominium->currency,
-            'url_spei'=>$urlSPEI,
-            'clabe'=>$clabe,
-            'order_id'=>$orderID,
-            'status'=>PaymentStatus::PENDING,
-            'bank_name'=>$banco
-        ]);
+            OrderPayments::create([
+                'id_client'=>$client->id,
+                'id_condominium'=>$condominium->id,
+                'amount'=>$request->amount,
+                'discount_condominium'=>$request->discount_condominium,
+                'currency'=>$condominium->currency,
+                'url_spei'=>$urlSPEI,
+                'clabe'=>$clabe,
+                'order_id'=>$orderID,
+                'status'=>PaymentStatus::PENDING,
+                'bank_name'=>$banco
+            ]);
+        }
+
+        
 
         return redirect()->route('order-payments.index');
 
     }
 
-    private function generatePaymentOrder($name, $email, $phone, $amount, $concept){
+    private function generateOpenPayOrder($name, $email, $phone, $amount, $concept){
         $merchantID = config('services.openpay.merchant_id');
         $privateKey = config('services.openpay.private_key');
         $baseURL = config('services.openpay.base_url');
