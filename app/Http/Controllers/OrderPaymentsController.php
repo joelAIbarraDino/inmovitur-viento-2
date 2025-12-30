@@ -20,7 +20,7 @@ class OrderPaymentsController extends Controller
     public function index()
     {
         return Inertia::render('Admin/orderPayment/index', [
-            'orderPayments' => OrderPayments::with('clients.users')->get()
+            'orderPayments' => OrderPayments::with('clients.users')->paginate(10)
         ]);
     }
 

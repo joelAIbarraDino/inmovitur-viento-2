@@ -3,10 +3,10 @@
 import ButtonNewRegister from '@/components/ButtonNewRegister.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 
-import { TableActions, TableRecordButton, TableRecords } from '@/components/tableRecords';
+import { TableActions, TablePagination, TableRecordButton, TableRecords } from '@/components/tableRecords';
 import { AppPageProps, BreadcrumbItem, Client } from '@/types';
 import { TableCell, TableRow } from '@/components/ui/table';
-import { usePage, Head, router } from '@inertiajs/vue3';
+import { usePage, Head, router, Link } from '@inertiajs/vue3';
 import { Pencil, Trash, Eye, FilePenLine } from 'lucide-vue-next';
 import { computed } from 'vue';
 import Swal from 'sweetalert2';
@@ -19,7 +19,8 @@ interface ClientsPageProps extends AppPageProps{
 }
 
 const page = usePage<ClientsPageProps>();
-const clients = computed(() => page.props.clients);
+const clients = computed(() => page.props.clients.data);
+const pagination = computed(() => page.props.clients.links);
 const flash = computed(()=>page.props.flash);
 
 const deleteClient = async(id:number)=>{
@@ -97,6 +98,8 @@ const deleteClient = async(id:number)=>{
 
                 </TableRow>
             </TableRecords>
+
+            <TablePagination :links="pagination"/>
         </div>
     </AppLayout>
 </template>

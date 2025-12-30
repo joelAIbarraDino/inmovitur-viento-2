@@ -2,12 +2,12 @@
 
 import ButtonNewRegister from '@/components/ButtonNewRegister.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { TableActions, TableRecordButton, TableRecords } from '@/components/tableRecords';
+import { TableActions, TableRecordButton, TableRecords, TablePagination } from '@/components/tableRecords';
 import { AppPageProps, BreadcrumbItem, Payment } from '@/types';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { usePage, Head, router } from '@inertiajs/vue3';
 import { formatCurrency } from '@/utils/formatCurrency';
-import { Pencil, Trash, Eye } from 'lucide-vue-next';
+
 import { formatDateTime } from '@/utils/formatDateTime'
 import { computed } from 'vue';
 import Swal from 'sweetalert2';
@@ -20,7 +20,8 @@ interface CondominiumsPageProps extends AppPageProps{
 }
 
 const page = usePage<CondominiumsPageProps>();
-const payments = computed(() => page.props.payments);
+const payments = computed(() => page.props.payments.data);
+const pagination = computed(() => page.props.links);
 const flash = computed(()=>page.props.flash);
 
 
@@ -64,6 +65,7 @@ const deletePayment = async(id:number)=>{
                     <TableCell>{{ formatDateTime(payment.created_at) }}</TableCell>
                 </TableRow>
             </TableRecords>
+            <TablePagination :links="pagination"/>
         </div>
     </AppLayout>
 </template>

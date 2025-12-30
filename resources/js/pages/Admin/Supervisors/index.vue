@@ -3,7 +3,7 @@
 import ButtonNewRegister from '@/components/ButtonNewRegister.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 
-import { TableActions, TableRecordButton, TableRecords } from '@/components/tableRecords';
+import { TableActions, TableRecordButton, TableRecords, TablePagination } from '@/components/tableRecords';
 import { AppPageProps, BreadcrumbItem, User } from '@/types';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { usePage, Head, router } from '@inertiajs/vue3';
@@ -19,7 +19,8 @@ interface ClientsPageProps extends AppPageProps{
 }
 
 const page = usePage<ClientsPageProps>();
-const supervisors = computed(() => page.props.supervisors);
+const supervisors = computed(() => page.props.supervisors.data);
+const pagination = computed(() => page.props.supervisors.links);
 const flash = computed(() => page.props.flash);
 
 
@@ -79,6 +80,8 @@ const deleteSupervisor = async(id:number)=>{
 
                 </TableRow>
             </TableRecords>
+
+            <TablePagination :links="pagination"/>
         </div>
     </AppLayout>
 </template>

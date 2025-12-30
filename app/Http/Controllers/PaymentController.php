@@ -16,7 +16,7 @@ class PaymentController extends Controller
     public function index()
     {
         return Inertia::render('Admin/payments/index', [
-            'payments' => Payments::with('condominiums.clients.users:id,name')->get(),
+            'payments' => Payments::with('condominiums.clients.users:id,name')->paginate(10),
         ]);
     }
 

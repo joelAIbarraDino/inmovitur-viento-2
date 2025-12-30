@@ -19,7 +19,7 @@ class CondominiumController extends Controller
     {
         
         return Inertia::render('Admin/Condominiums/index', [
-            'condominiums'=>Condominiums::with('clients.users:id,name')->get()
+            'condominiums'=>Condominiums::with('clients.users:id,name')->paginate(10)
         ]);
     }
 

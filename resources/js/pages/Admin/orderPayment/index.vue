@@ -2,7 +2,7 @@
 
 import ButtonNewRegister from '@/components/ButtonNewRegister.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { TableActions, TableRecordButton, TableRecords } from '@/components/tableRecords';
+import { TableActions, TableRecordButton, TableRecords, TablePagination } from '@/components/tableRecords';
 import { AppPageProps, BreadcrumbItem, OrderPayment } from '@/types';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { usePage, Head, router } from '@inertiajs/vue3';
@@ -20,7 +20,8 @@ interface CondominiumsPageProps extends AppPageProps{
 }
 
 const page = usePage<CondominiumsPageProps>();
-const orderPayments = computed(() => page.props.orderPayments);
+const orderPayments = computed(() => page.props.orderPayments.data);
+const pagination =computed(() => page.props.orderPayments.links);
 const flash = computed(()=>page.props.flash);
 
 
@@ -64,6 +65,8 @@ const deletePayment = async(id:number)=>{
                     <TableCell>{{ formatDateTime(orderPayment.created_at) }}</TableCell>
                 </TableRow>
             </TableRecords>
+
+            <TablePagination :links="pagination"/>
         </div>
     </AppLayout>
 </template>
