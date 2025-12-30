@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class OrderPaymentsController extends Controller
@@ -79,7 +80,7 @@ class OrderPaymentsController extends Controller
 
     }
 
-    private function generatePaymentOrder($name, $email, $phone, $amount, $concept, $contract){
+    private function generatePaymentOrder($name, $email, $phone, $amount, $concept){
         $merchantID = config('services.openpay.merchant_id');
         $privateKey = config('services.openpay.private_key');
         $baseURL = config('services.openpay.base_url');
@@ -92,18 +93,28 @@ class OrderPaymentsController extends Controller
         $nombre = $partes[0]; 
         $apellido = $partes[1] ?? 'Sin Apellido';
 
+        $orderID = 'OP-' . now()->format('Ymd-His') . '-' . Str::upper(Str::random(6));
+
+        $customer = [
+            "name" => $nombre,
+            "last_name" => $apellido,
+        ];
+
+        if (!empty($phone)) {
+            $customer["phone_number"] = $phone;
+        }
+
+        if (!empty($email) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $customer["email"] = $email;
+        }
+        
         $payload = [
             "method"=>"bank_account",
             "amount"=>$amount,
             "description"=>$concept,
-            "order_id"=>$contract.'-'.now(),
+            "order_id"=>$orderID,
             "due_date"=>now()->addDays(5)->format('Y-m-d\TH:i:s'),
-            "customer"=> [
-                "name"=>$nombre,
-                "last_name"=>$apellido,
-                "phone_number"=>$phone,
-                "email"=>$email
-            ]
+            "customer"=> $customer
         ];
 
         try {
