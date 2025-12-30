@@ -12,14 +12,18 @@ class TowerController extends Controller
 {
     public function towerInformation(Request $request){
 
+        $towerOrder = [
+            'Torre A' => 1,
+            'Torre B' => 2,
+            'Torre C' => 3,
+        ];
+
         $targetCurrency = $request->cookie('preferred_currency', 'usd');
 
         $exchange = Badge::latest('created_at')->first(['rate', 'created_at']);
         $rate = $exchange->rate;
 
-        $condominiums = Condominiums::with('payments')
-            ->select('id', 'tower', 'price', 'currency', 'id_client')
-            ->get();
+        $condominiums = Condominiums::with('payments')->get();
 
         $towers = $condominiums
             ->groupBy('tower')
@@ -65,6 +69,7 @@ class TowerController extends Controller
                     'currency' => $targetCurrency,
                 ];
             })
+            ->sortBy(fn ($tower) => $towerOrder[$tower['towerName']] ?? 99)
             ->values();
 
         return Inertia::render('Admin/towerInformation/towerInformation', [
@@ -77,6 +82,6 @@ class TowerController extends Controller
         if ($from == $to)
             return $amount;
     
-        return $from == Currency::USD? $amount*$rate:$amount/$rate;
+        return Currency::from($from) === Currency::USD? $amount*$rate:$amount/$rate;
     }
 }

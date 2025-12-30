@@ -12,14 +12,18 @@ class DashboardController extends Controller
 {
     public function dashboard(Request $request){
 
+        $towerOrder = [
+            'Torre A' => 1,
+            'Torre B' => 2,
+            'Torre C' => 3,
+        ];
+
         $targetCurrency = $request->cookie('preferred_currency', 'usd');
 
         $exchange = Badge::latest('created_at')->first(['rate', 'created_at']);
         $rate = $exchange->rate;
 
-        $condominiums = Condominiums::with('payments')
-            ->select('id', 'tower', 'price', 'currency', 'id_client')
-            ->get();
+        $condominiums = Condominiums::with('payments')->get();
 
         $towers = $condominiums
             ->groupBy('tower')
@@ -65,6 +69,7 @@ class DashboardController extends Controller
                     'currency' => $targetCurrency,
                 ];
             })
+            ->sortBy(fn ($tower) => $towerOrder[$tower['towerName']] ?? 99)
             ->values();
 
         return Inertia::render('Dashboard', [
@@ -76,6 +81,6 @@ class DashboardController extends Controller
         if ($from == $to)
             return $amount;
     
-        return $from == Currency::USD? $amount*$rate:$amount/$rate;
+        return Currency::from($from) === Currency::USD? $amount*$rate:$amount/$rate;
     }
 }
