@@ -96,7 +96,7 @@ class OrderPaymentsController extends Controller
             "method"=>"bank_account",
             "amount"=>$amount,
             "description"=>$concept,
-            "order_id"=>$contract,
+            "order_id"=>$contract.'-'.now(),
             "due_date"=>now()->addDays(5)->format('Y-m-d\TH:i:s'),
             "customer"=> [
                 "name"=>$nombre,
