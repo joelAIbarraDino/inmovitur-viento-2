@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\PaymentStatus;
 use App\Models\Clients;
 use App\Models\Condominiums;
 use App\Models\OrderPayments;
@@ -66,13 +67,14 @@ class OrderPaymentsController extends Controller
 
         OrderPayments::create([
             'id_client'=>$client->id,
+            'id_condominium'=>$condominium->id,
             'amount'=>$request->amount,
             'discount_condominium'=>$request->discount_condominium,
             'currency'=>$condominium->currency,
             'url_spei'=>$urlSPEI,
             'clabe'=>$clabe,
             'order_id'=>$orderID,
-            'status'=>'Pendiente',
+            'status'=>PaymentStatus::PENDING,
             'bank_name'=>$banco
         ]);
 
@@ -107,7 +109,7 @@ class OrderPaymentsController extends Controller
         if (!empty($email) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $customer["email"] = $email;
         }
-        
+
         $payload = [
             "method"=>"bank_account",
             "amount"=>$amount,

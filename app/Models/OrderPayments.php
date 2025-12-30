@@ -8,6 +8,7 @@ class OrderPayments extends Model
 {
     protected $fillable = [
         'id_client',
+        'id_condominium',
         'amount',
         'discount_condominium',
         'currency',
