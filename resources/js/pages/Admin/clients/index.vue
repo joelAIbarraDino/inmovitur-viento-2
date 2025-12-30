@@ -7,7 +7,7 @@ import { TableActions, TableRecordButton, TableRecords } from '@/components/tabl
 import { AppPageProps, BreadcrumbItem, Client } from '@/types';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { usePage, Head, router } from '@inertiajs/vue3';
-import { Pencil, Trash, Eye } from 'lucide-vue-next';
+import { Pencil, Trash, Eye, FilePenLine } from 'lucide-vue-next';
 import { computed } from 'vue';
 import Swal from 'sweetalert2';
 
@@ -21,7 +21,6 @@ interface ClientsPageProps extends AppPageProps{
 const page = usePage<ClientsPageProps>();
 const clients = computed(() => page.props.clients);
 const flash = computed(()=>page.props.flash);
-
 
 const deleteClient = async(id:number)=>{
     const result = await Swal.fire({
@@ -76,6 +75,14 @@ const deleteClient = async(id:number)=>{
                             hover="bg-orange-800"
                             :icon=Eye
                             :action="`/clients/${client.id}`"
+                        />
+
+                        <TableRecordButton
+                            type="url"
+                            color="bg-indigo-600"
+                            hover="bg-indigo-800"
+                            :icon=FilePenLine
+                            :action="`/clients/new-contract/${client.id}`"
                         />
 
                         <TableRecordButton

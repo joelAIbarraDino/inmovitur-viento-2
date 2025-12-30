@@ -26,8 +26,6 @@ const isAdmin = computed(() => {
         : false;
 });
 
-console.log(isAdmin.value);
-
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
@@ -74,8 +72,8 @@ const mainNavItemsClient: NavItem[] = [
         icon: LayoutGrid,
     },
     {
-        title: 'Documentos',
-        href: '/upload-files',
+        title: 'Mis documentos',
+        href: '/my-files',
         icon: Files,
     },
 ];

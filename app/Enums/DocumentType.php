@@ -24,8 +24,7 @@ enum DocumentType:string
     case INTENCION_FIDEICOMISO = 'Intencion de construccion de fideicomiso';
     case CARTA_PODER = 'Poder representante';
 
-    public static function options(): array
-    {
+    public static function options(): array{
         return array_map(
             fn($case) => ['value' => $case->value, 'label' => ucfirst($case->value)],
             self::cases()

@@ -61,7 +61,7 @@ class HandleInertiaRequests extends Middleware
                     'created_at' => $badge->created_at
                 ] : null;
             },
-            'currency'=>$request->cookie('preferred_currency', 'MXN'),
+            'currencyView'=>$request->cookie('preferred_currency', 'MXN'),
         ];
     }
 }

@@ -69,7 +69,7 @@ class ComprobantePago extends FPDF{
         $this->Cell(0, 10, 'Desglose de pagos', 0, 1, 'L');
 
         // Dimensiones de la tabla (ajustadas para que sumen el ancho útil de la página)
-        $columnWidths = [45, 45, 45, 45];
+        $columnWidths = [38, 38, 38, 38, 38];
         $tableWidth = array_sum($columnWidths);
         $marginLeft = ($this->GetPageWidth() - $tableWidth) / 2;
 
@@ -82,6 +82,7 @@ class ComprobantePago extends FPDF{
         $this->Cell($columnWidths[1], 10, 'Abono', 1, 0, 'C', true);
         $this->Cell($columnWidths[2], 10, 'Abono total', 1, 0, 'C', true);
         $this->Cell($columnWidths[3], 10, 'Saldo', 1, 0, 'C', true);
+        $this->Cell($columnWidths[4], 10, 'Pena', 1, 0, 'C', true);
         $this->Ln();
 
         // Totales iniciales
@@ -96,6 +97,7 @@ class ComprobantePago extends FPDF{
             $fechaFormateada = Carbon::parse($pago->created_at)->locale('es')->isoFormat('DD [de] MMM [de] YYYY');
             
             $saldoPendiente -= $pago->amount;
+            $pena = $pago->discount_condominium;
             $totalPagado += $pago->amount;
 
             // Zebra styling
@@ -107,6 +109,8 @@ class ComprobantePago extends FPDF{
             $this->Cell($columnWidths[1], 10, "$".number_format($pago->amount, 2), 1, 0, 'C', true);
             $this->Cell($columnWidths[2], 10, "$".number_format($totalPagado, 2), 1, 0, 'C', true);
             $this->Cell($columnWidths[3], 10, "$".number_format($saldoPendiente, 2), 1, 0, 'C', true);
+            $this->Cell($columnWidths[3], 10, "$".number_format($saldoPendiente - $pena, 2), 1, 0, 'C', true);
+            $saldoPendiente -= $pena;
             $this->Ln();
         }
 

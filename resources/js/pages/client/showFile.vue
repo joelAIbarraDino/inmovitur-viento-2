@@ -9,7 +9,7 @@ import Button from '@/components/ui/button/Button.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
-    {title:"Clientes", href:"/clients"},
+    {title:"Mis documentos", href:"/my-files"},
     {title:"Ver documento", href:"#"}
 ];
 
@@ -50,14 +50,7 @@ function updateStatus(status:string){
         <div class="flex flex-1 flex-col gap-4 p-4 xl:w-1/2  md:w-3/4 w-11/12 mx-auto my-10 border rounded-md shadow-xl">
             <div class="flex justify-between items-center  gap-2 flex-row">
                 <span class="text-primary font-bold text-xl md:text-4xl">{{ document.type_document }}</span>
-                <Button as="a" :href="`/clients/${document.id_client}/edit`" class="bg-primary hover:bg-cyan-700 dark:text-white"> <ArrowLeft/> Regresar</Button>
-            </div>
-            <div>
-                <p><span class="text-primary font-bold">Cliente: </span>{{ document.clients?.users?.name??'Sin nombre' }}</p>
-                <p><span class="text-primary font-bold">Contrato: </span>{{ document.clients?.no_contract??'Sin contrato' }}</p>
-                
-                <Button class="bg-primary mt-2" v-if="document.type_document!='Contrato' && document.status === 'aceptado'" @click="updateStatus('rechazado')">Solicitar nuevamente</Button>
-                <Button class="mt-2 bg-amber-500 hover:bg-amber-600" v-else-if="document.type_document!='Contrato' && document.status === 'revision' || document.status === 'rechazado' || document.status === 'pendiente'" @click="updateStatus('aceptado')">Aceptar Documento</Button>
+                <Button as="a" href="/my-files" class="bg-primary hover:bg-cyan-700 dark:text-white"> <ArrowLeft/> Regresar</Button>
             </div>
             <iframe
                 :src="streamURL"

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import type { BreadcrumbItemType } from '@/types';
+import type { AppPageProps, BreadcrumbItemType } from '@/types';
 import { router, usePage } from '@inertiajs/vue3';
 import { Banknote } from 'lucide-vue-next';
 import { computed } from 'vue';
@@ -10,11 +10,11 @@ import { formatDate } from '@/utils/formatDate';
 const page = usePage();
 
 const exchange = computed(() => page.props.exchange ?? null);
-const currency = computed(() => page.props.currency);
+const currencyView = computed(() => (page.props.currencyView as string));
 
 function setCurrency(value: 'mxn' | 'usd') {
     
-    if (!value || value === currency.value) return
+    if (!value || value === currencyView.value) return
 
     router.post('/currency', {
         currency: value
@@ -46,8 +46,8 @@ withDefaults(
                     <Breadcrumbs :breadcrumbs="breadcrumbs" />
                 </template>
                 <div class="flex gap-2 items-center">
-                    <button @click="setCurrency(currency==='mxn'?'usd':'mxn')" class="flex items-center justify-center gap-1">
-                        <span class="text-xs font-medium">{{ currency.toUpperCase() }}</span>
+                    <button @click="setCurrency(currencyView==='mxn'?'usd':'mxn')" class="flex items-center justify-center gap-1">
+                        <span class="text-xs font-medium">{{ currencyView.toUpperCase()??'???' }}</span>
                         <Banknote/>
                     </button>
 

@@ -5,6 +5,7 @@ const props = defineProps<{
     status:string,
     fileUrl:string,
     fileType:string
+    textButton?:string
 }>();
 
 let conteinerClass = "text-white py-2 px-4 rounded-sm flex items-center justify-between "
@@ -38,7 +39,7 @@ switch(props.status){
     <div :class="conteinerClass">
         <div>
             <p class="text-sm">{{ fileType }}</p>
-            <a class="text-xl font-bold underline hover:no-underline transition" :href="fileUrl">Ver archivo</a>
+            <a class="text-xl font-bold underline hover:no-underline transition" :href="fileUrl">{{ textButton??'Ver archivo' }}</a>
         </div>
 
         <FileText />

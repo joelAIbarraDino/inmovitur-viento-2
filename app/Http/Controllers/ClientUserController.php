@@ -13,6 +13,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
@@ -186,5 +187,54 @@ class ClientUserController extends Controller
         });
 
         return redirect()->route('clients.index')->with('message', 'Cliente eliminado correctamente');
+    }
+
+    public function editContract(Clients $client)
+    {
+        return Inertia::render('Admin/clients/contract', [
+            'client'=>$client
+        ]);
+    }
+
+    public function updateContract(Request $request, Clients $client)
+    {
+
+        $request->validate([
+            'contract'=>'required|file|mimes:pdf|max:5120',
+        ]);
+
+        $contract = $client->hasContract();
+
+        if($contract){
+            $path = $request->file('contract')->store("documents", "private");
+
+            if($contract->path && Storage::disk('private')->exists($contract->path)) {
+                Storage::disk('private')->delete($contract->path);
+            }
+
+            $contract->update([
+                'original_name' => $request->file('contract')->getClientOriginalName(),
+                'stored_name' => basename($path),
+                'status' => DocumentStatus::ACEPTADO,
+                'path' => $path,
+            ]);
+
+            return redirect()->route('clients.index')->with('message', 'Documento actualizado con exito');
+
+        }else{
+            $path = $request->file('contract')->store("documents", "private");
+
+            Documents::create([
+                'id_client' => $client->id,
+                'original_name' => $request->file('contract')->getClientOriginalName(),
+                'stored_name' => basename($path),
+                'type_document' => DocumentType::CONTRATO,
+                'status' => DocumentStatus::ACEPTADO,
+                'path' => $path,
+            ]);
+
+            return redirect()->route('clients.index')->with('message', 'Documento actualizado con exito');
+        }
+            
     }
 }
