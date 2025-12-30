@@ -54,7 +54,7 @@ class ClientUserController extends Controller
             'phone' =>'nullable|digits_between:8,15',
             'legal_personality'=>['required', new Enum(LegalPersonality::class)],
             'marital_partnership'=>['required', new Enum(MaritalPartnership::class)],
-            'contract'=>'required|file|mimes:pdf|max:5120',
+            'contract'=>'required|file|mimes:pdf',
             'nacionality' => ['required', new Enum(Nacionality::class)],
             'password'=>['required', 'confirmed', Password::default()]
         ]);
@@ -200,7 +200,7 @@ class ClientUserController extends Controller
     {
 
         $request->validate([
-            'contract'=>'required|file|mimes:pdf|max:5120',
+            'contract'=>'required|file|mimes:pdf',
         ]);
 
         $contract = $client->hasContract();

@@ -82,7 +82,7 @@ class DashboardClientController extends Controller
     public function storeDocument(Request $request){
         $request->validate([
             'type_document' => ['required', new Enum(DocumentType::class) ],
-            'file'=>'required|file|mimes:pdf|max:5120',
+            'file'=>'required|file|mimes:pdf',
         ]);
 
         $path = $request->file('file')->store("documents", "private");
@@ -145,7 +145,7 @@ class DashboardClientController extends Controller
             return redirect()->route('client.documents');
 
         $request->validate([
-            'file'=>'required|file|mimes:pdf|max:5120',
+            'file'=>'required|file|mimes:pdf',
         ]);
 
         $path = $request->file('file')->store("documents", "private");
