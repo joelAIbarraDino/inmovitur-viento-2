@@ -21,7 +21,7 @@ const props = defineProps<{
             as="a"
             v-for="(link, index) in props.links":key="index"
             :href="link.url??'#'"
-            :enabled="link.active"
+            :enabled="link.url ? true:false"
             v-html="link.label"
             :class="[
                 link.active ? 'bg-primary text-white':'bg-white text-gray-700',
