@@ -21,7 +21,7 @@ interface CondominiumsPageProps extends AppPageProps{
 
 const page = usePage<CondominiumsPageProps>();
 const payments = computed(() => page.props.payments.data);
-const pagination = computed(() => page.props.links);
+const pagination = computed(() => page.props.payments.links);
 const flash = computed(()=>page.props.flash);
 
 
