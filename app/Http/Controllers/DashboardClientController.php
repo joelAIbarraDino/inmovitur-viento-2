@@ -11,6 +11,7 @@ use App\Models\Condominiums;
 use App\Models\Documents;
 use App\Models\OrderPayments;
 use App\Models\Payments;
+use App\Models\ProfPayments;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Enum;
@@ -23,7 +24,9 @@ class DashboardClientController extends Controller
         $client = Clients::where('id_user', $id)->get()->first();
         $condominium = Condominiums::where('id_client', $client->id)->get()->first();
         $payments = Payments::where('id_condominium', $condominium->id)->get();
-        $orderPayment = OrderPayments::where('id_client', $client->id)->where('status', 'pendiente')->get();
+        $orderPayment = OrderPayments::where('id_condominium', $condominium->id)->where('status', 'pendiente')->get();
+
+        $profPayments = ProfPayments::where('id_condominium', $condominium->id)->where('status', 'pendiente')->get();
         
         $charged = 0;
         $penality = 0;
@@ -34,13 +37,14 @@ class DashboardClientController extends Controller
         }
 
         return Inertia::render('DashboardClient', [
-            'towerName' =>$condominium->number,
+            'condominium'=>$condominium,
             'charged' => round($charged, 4),
             'pending' => round($condominium->price - $charged, 4) - round($penality, 4),
             'penality'=> round($penality, 4),
             'currency'=>$condominium->currency,
             'payments'=>$payments,
-            'orderPayments'=>$orderPayment
+            'orderPayments'=>$orderPayment,
+            'profPayments'=>$profPayments
         ]);
     }
 
@@ -162,6 +166,32 @@ class DashboardClientController extends Controller
         ]);
 
         return redirect()->route('client.documents');
+    }
+
+    public function uploadProf(ProfPayments $profPayment){
+        return Inertia::render('client/profUpload', [
+            'profPayment'=>$profPayment
+        ]);
+    }
+
+    public function storeProf(Request $request){
+
+        $request->validate([
+            'file'=>'required|image|mimes:jpeg,png,jpg',
+        ]);
+
+        $path = $request->file('file')->store("profts", "private");
+
+        $profPayment = ProfPayments::where('id', $request->id);
+        
+        $profPayment->update([
+            'original_name' => $request->file('file')->getClientOriginalName(),
+            'stored_name' => basename($path),
+            'status' => DocumentStatus::REVISION,
+            'path' => $path,
+        ]);
+
+        return redirect()->route('client.index');
     }
 
 }

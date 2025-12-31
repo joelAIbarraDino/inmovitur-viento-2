@@ -35,7 +35,7 @@ class OrderPaymentsController extends Controller
     public function create()
     {
         return Inertia::render('Admin/orderPayment/create', [
-            'condominiums' => Condominiums::whereNotNull('id_client')->get(),
+            'condominiums' => Condominiums::whereNotNull('id_client')->where('currency', Currency::MXN)->get(),
         ]);
     }
 

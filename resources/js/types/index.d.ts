@@ -93,7 +93,7 @@ export interface Document {
 
 export interface OrderPayment {
     id:number;
-    id_client:number;
+    id_condomonium:number;
     amount:number;
     discount_condominium:number;
     currency:string;
@@ -104,6 +104,19 @@ export interface OrderPayment {
     status:string;
     created_at:string;
     clients?:Client;
+}
+
+export interface ProfPayment {
+    id:number;
+    id_condomonium:number;
+    original_name:string;
+    stored_name:string;
+    path:string;
+    amount:number;
+    discount_condominium:number;
+    currency:string;
+    status:string;
+    created_at:string;
 }
 
 export interface enums{

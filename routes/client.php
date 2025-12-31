@@ -11,6 +11,9 @@ Route::get('voucher', [DashboardClientController::class, 'voucher'])->middleware
 Route::get('file-upload/{typeFile}', [DashboardClientController::class, 'uploadDocument'])->middleware(['auth', 'verified'])->name('client.document-create');
 Route::post('file-upload', [DashboardClientController::class, 'storeDocument'])->middleware(['auth', 'verified'])->name('client.store-document');
 
+Route::get('prof-upload/{profPayment}', [DashboardClientController::class, 'uploadProf'])->middleware(['auth', 'verified'])->name('client.prof-create');
+Route::post('prof-upload', [DashboardClientController::class, 'storeProf'])->middleware(['auth', 'verified'])->name('client.store-prof');
+
 
 Route::middleware('auth', 'verified')->group(function(){
     //rutas para control de documentos

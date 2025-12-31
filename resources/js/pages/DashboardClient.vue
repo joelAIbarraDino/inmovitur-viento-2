@@ -1,39 +1,39 @@
 <script setup lang="ts">
+import { AppPageProps, Condominium, OrderPayment, Payment, ProfPayment, type BreadcrumbItem } from '@/types';
 import TowerCard from '@/components/DashboardCard/TowerCard.vue';
 import { TableRecords } from '@/components/tableRecords';
-import TableRecordButton from '@/components/tableRecords/TableRecordButton.vue';
 import { Button } from '@/components/ui/button';
 import { TableCell, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { AppPageProps, Condominium, OrderPayment, Payment, type BreadcrumbItem } from '@/types';
 import { formatCurrency } from '@/utils/formatCurrency';
 import { formatDateTime } from '@/utils/formatDateTime';
-import { Head, Link, usePage } from '@inertiajs/vue3';
-import { FileSliders } from 'lucide-vue-next';
+import { Head, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 
 const columnsName = ['Monto', 'Pena', 'Fecha'];
-const columnsName2 = ['Monto', 'Pena', 'Fecha', 'Referencia de pago'];
+const columnsName2 = ['Monto', 'Pena', 'Fecha', 'Pago'];
 const breadcrumbs: BreadcrumbItem[] = [{title: 'Mi cuenta',href:'#'},];
 
 interface DashboardPageProps extends AppPageProps{
-    towerName:string;
+    condominium:Condominium;
     charged:number;
     pending:number;
     penality:number;
     currency:string;
     payments:Payment[];
     orderPayments:OrderPayment[];
+    profPayments:ProfPayment[];
 }
 
 const page = usePage<DashboardPageProps>();
-const towerName = computed(()=>page.props.towerName);
+const condominium = computed(()=>page.props.condominium);
 const charged = computed(()=>page.props.charged);
 const pending = computed(()=>page.props.pending);
 const penality = computed(()=>page.props.penality);
 const currency = computed(()=>page.props.currency);
 const payments = computed(()=>page.props.payments);
 const orderPayments = computed(()=>page.props.orderPayments);
+const profPayments = computed(()=>page.props.profPayments);
 
 </script>
 
@@ -45,7 +45,7 @@ const orderPayments = computed(()=>page.props.orderPayments);
             
             <div class="w-9/10 md:w-1/4 mx-auto">
                 <TowerCard 
-                    :tower-name="towerName" 
+                    :tower-name="condominium.number" 
                     :charged="charged"
                     :pending="pending"
                     :penality="penality"
@@ -81,7 +81,25 @@ const orderPayments = computed(()=>page.props.orderPayments);
 
                 <div class="space-y-2">
                     <h2 class="text-xl font-bold text-primary dark:text-white">Ordenes de pago</h2>
-                    <TableRecords caption="Lista de pagos" :columns-head="columnsName2">
+                    <TableRecords v-if="condominium.currency==='usd'" caption="Lista de pagos" :columns-head="columnsName2">
+                        <TableRow v-for="profPayment in profPayments":for="profPayment.id">
+                            <TableCell>$ {{ formatCurrency(profPayment.amount) }} <span class="font-bold ">{{ profPayment.currency.toUpperCase() }}</span></TableCell>
+                            <TableCell>$ {{ formatCurrency(profPayment.discount_condominium) }} <span class="font-bold ">{{ profPayment.currency.toUpperCase() }}</span></TableCell>
+                            <TableCell>{{ formatDateTime(profPayment.created_at) }}</TableCell>
+                            <TableCell>
+                                <a 
+                                    :href="`prof-upload/${profPayment.id}`" 
+                                    rel="noopener noreferrer"
+                                    class="text-primary hover:underline"
+                                >
+                                    subir comprobante
+                                </a>
+                                
+                            </TableCell>
+                        </TableRow>
+                    </TableRecords>
+
+                    <TableRecords v-else caption="Lista de pagos" :columns-head="columnsName2">
                         <TableRow v-for="orderPayment in orderPayments":for="orderPayment.id">
                             <TableCell>$ {{ formatCurrency(orderPayment.amount) }} <span class="font-bold ">{{ orderPayment.currency.toUpperCase() }}</span></TableCell>
                             <TableCell>$ {{ formatCurrency(orderPayment.discount_condominium) }} <span class="font-bold ">{{ orderPayment.currency.toUpperCase() }}</span></TableCell>
@@ -93,7 +111,7 @@ const orderPayments = computed(()=>page.props.orderPayments);
                                     rel="noopener noreferrer"
                                     class="text-primary hover:underline"
                                 >
-                                    Datos SPEI
+                                    datos SPEI
                                 </a>
                                 
                             </TableCell>

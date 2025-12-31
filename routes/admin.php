@@ -6,7 +6,9 @@ use App\Http\Controllers\CondominiumController;
 use App\Http\Controllers\ClientUserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\DocumentProfController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ProfPaymentsController;
 use App\Http\Controllers\TowerController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +20,7 @@ Route::resource('supervisors', SupervisorUserController::class)->middleware('aut
 Route::resource('condominiums', CondominiumController::class)->middleware('auth', 'verified');
 Route::resource('payments', PaymentController::class)->middleware('auth', 'verified');
 Route::resource('order-payments', OrderPaymentsController::class)->middleware('auth', 'verified');
+Route::resource('prof-payments', ProfPaymentsController::class)->middleware('auth', 'verified');
 
 Route::middleware('auth', 'verified')->group(function(){
     
@@ -29,4 +32,7 @@ Route::middleware('auth', 'verified')->group(function(){
     Route::get('/clients/new-contract/{client}', [ClientUserController::class, 'editContract'])->name('client.edit-client');
     Route::post('/clients/new-contract/{client}', [ClientUserController::class, 'updateContract'])->name('client.update-client');
 
+    Route::get('/profDocument/{profPayment}', [DocumentProfController::class, 'show'])->name('profDocument.show');
+    Route::get('/profDocument/{profPayment}/stream', [DocumentProfController::class, 'stream'])->name('profDocument.stream');
+    Route::patch('/profDocument/{profPayment}/status', [DocumentProfController::class, 'updateStatus'])->name('profDocument.update-status');
 });

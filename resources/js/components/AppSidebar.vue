@@ -61,7 +61,7 @@ const mainNavItems: NavItem[] = [
 
     {
         title: 'Ordenes de pagos (usd)',
-        href: '/order-payments-usd',
+        href: '/prof-payments',
         icon: HandCoins,
     },
     {

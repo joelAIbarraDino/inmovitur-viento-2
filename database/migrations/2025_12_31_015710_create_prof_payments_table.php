@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('prof_payments', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_condominium');
-            $table->string('original_name');
-            $table->string('stored_name');
-            $table->string('path');
+            $table->string('original_name')->nullable();
+            $table->string('stored_name')->nullable();
+            $table->string('path')->nullable();
             $table->float('amount');
             $table->float("discount_condominium")->default(0);
             $table->enum('currency', Currency::cases())->default(Currency::USD);
