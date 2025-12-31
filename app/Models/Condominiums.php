@@ -21,4 +21,8 @@ class Condominiums extends Model
     public function clients(){
         return $this->belongsTo(Clients::class, 'id_client');
     }
+
+    public function orderPayments(){
+        return $this->hasMany(OrderPayments::class, 'id_condominium');
+    }
 }

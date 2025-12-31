@@ -58,7 +58,7 @@ const deletePayment = async(id:number)=>{
 
             <TableRecords caption="Lista de ordenes de pagos" :columns-head="columnsName">
                 <TableRow v-for="orderPayment in orderPayments":for="orderPayment.id">
-                    <TableCell>{{ orderPayment.clients?.users?.name ?? 'Sin nombre' }}</TableCell>
+                    <TableCell>{{ orderPayment.condominiums?.clients?.users?.name ?? 'Sin nombre' }}</TableCell>
                     <TableCell>$ {{ formatCurrency(orderPayment.amount) }} <span class="font-bold ">{{ orderPayment.currency.toUpperCase() }}</span></TableCell>
                     <TableCell>$ {{ formatCurrency(orderPayment.discount_condominium) }} <span class="font-bold ">{{ orderPayment.currency.toUpperCase() }}</span></TableCell>
                     <TableCell>{{ orderPayment.status}}</TableCell>

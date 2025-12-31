@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class OrderPayments extends Model
 {
     protected $fillable = [
-        'id_client',
         'id_condominium',
         'amount',
         'discount_condominium',
@@ -19,7 +18,7 @@ class OrderPayments extends Model
         'status',
     ];
 
-    public function clients(){
-        return $this->belongsTo(Clients::class, 'id_client');
+    public function condominiums(){
+        return $this->belongsTo(Condominiums::class, 'id_condominium');
     }
 }
