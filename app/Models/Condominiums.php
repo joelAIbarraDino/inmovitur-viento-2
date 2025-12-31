@@ -25,4 +25,8 @@ class Condominiums extends Model
     public function orderPayments(){
         return $this->hasMany(OrderPayments::class, 'id_condominium');
     }
+
+    public function profPayments(){
+        return $this->hasMany(ProfPayments::class, 'id_condominium');
+    }
 }

@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
-import { LayoutGrid, UserSearch, User, DoorOpen, CircleDollarSign, Hotel, Files, Landmark } from 'lucide-vue-next';
+import { LayoutGrid, UserSearch, User, DoorOpen, CircleDollarSign, Hotel, Files, HandCoins } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 import { usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
@@ -54,9 +54,15 @@ const mainNavItems: NavItem[] = [
     },
 
     {
-        title: 'Ordenes de pagos',
+        title: 'Ordenes de pagos (mxn)',
         href: '/order-payments',
-        icon: CircleDollarSign,
+        icon: HandCoins,
+    },
+
+    {
+        title: 'Ordenes de pagos (usd)',
+        href: '/order-payments-usd',
+        icon: HandCoins,
     },
     {
         title: 'Supervisores',
