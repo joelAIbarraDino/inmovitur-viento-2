@@ -47,5 +47,10 @@ return [
         'production' => env('OPENPAY_PRODUCTION'),
         'base_url' => env('OPENPAY_BASE_URL'),
     ],
+    'stripe' =>  [
+        'key'=> env('STRIPE_KEY'),
+        'secret'=> env('STRIPE_SECRET'),
+        'webhook_secret' => env('STRIPE_WEBHOOK_SECRET')
+    ]
 
 ];

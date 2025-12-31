@@ -1,9 +1,8 @@
 <?php
 
 use App\Http\Controllers\CurrencyController;
-use App\Http\Controllers\OpenPayController;
 use App\Http\Controllers\OpenPayWebhookController;
-use App\Http\Controllers\OrderPaymentsController;
+use App\Http\Controllers\StripeWebhookController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -12,6 +11,7 @@ Route::get('/', function () {
 
 Route::post('/currency', [CurrencyController::class, 'set'])->name('currency.set');
 Route::post('/webhooks/openpay', [OpenPayWebhookController::class, 'handle']);
+Route::post('/webhooks/stripe', [StripeWebhookController::class, 'handle']);
 
 
 require __DIR__.'/auth.php';

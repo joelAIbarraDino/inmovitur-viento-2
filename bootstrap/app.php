@@ -25,6 +25,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->validateCsrfTokens(except: [
             'webhooks/openpay',
+            'webhooks/stripe',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
