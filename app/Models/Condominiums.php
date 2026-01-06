@@ -11,6 +11,7 @@ class Condominiums extends Model
         'tower',
         'number',
         'price',
+        'monthly_payment',
         'currency'
     ];
 

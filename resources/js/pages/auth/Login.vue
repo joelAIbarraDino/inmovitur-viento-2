@@ -101,7 +101,7 @@ defineProps<{
 
             <div class="text-center text-sm text-muted-foreground">
                 ¿Todavía no estas registrado?
-                <TextLink href="#" :tabindex="5">Completa tu cuenta</TextLink>
+                <TextLink href="/new-client" :tabindex="5">Completa tu cuenta</TextLink>
             </div>
         </Form>
     </AuthBase>

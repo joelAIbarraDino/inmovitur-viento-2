@@ -110,6 +110,45 @@ class OrderPaymentsController extends Controller
 
     }
 
+
+    public function generateOrders(){
+        $condominiums = Condominiums::whereNotNull('id_client')->where('currency', Currency::MXN)->get();
+
+        foreach($condominiums as $condominium){
+            $client = Clients::find($condominium->id_client)->load('users');
+
+            $response = $this->generateOpenPayOrder(
+                $client->users->name, 
+                $client->users->email, 
+                $client->phone, 
+                $condominium->monthly_payment,
+                'Pago de condominio #'.$condominium->number,
+                $client->no_contract
+            );
+
+            $clabe = $response['payment_method']['clabe'];
+            $banco = $response['payment_method']['bank'];
+            $urlSPEI = $response['payment_method']['url_spei'];
+
+            $orderID = $response['order_id'];
+
+            OrderPayments::create([
+                'id_client'=>$client->id,
+                'id_condominium'=>$condominium->id,
+                'amount'=>$condominium->monthly_payment,
+                'discount_condominium'=>0,
+                'currency'=>$condominium->currency,
+                'url_spei'=>$urlSPEI,
+                'clabe'=>$clabe,
+                'order_id'=>$orderID,
+                'status'=>PaymentStatus::PENDING,
+                'bank_name'=>$banco
+            ]);
+        }
+
+        return redirect()->route('order-payments.index');
+    }
+
     private function generateOpenPayOrder($name, $email, $phone, $amount, $concept){
         $merchantID = config('services.openpay.merchant_id');
         $privateKey = config('services.openpay.private_key');

@@ -32,6 +32,7 @@ const form = useForm({
     tower:undefined,
     number:undefined,
     price:undefined as number | undefined,
+    monthly_payment: undefined as number | undefined,
     currency:undefined,
 
 });
@@ -56,6 +57,29 @@ const priceFormatted = computed({
         const numero = parseFloat(limpio)
 
         form.price = isNaN(numero) ? undefined : numero
+    },
+})
+
+const priceFormatted2 = computed({
+    get(): string {
+        if (form.monthly_payment === undefined || form.monthly_payment === null) {
+            return ''
+        }
+
+        return form.monthly_payment.toLocaleString('en-US', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+        })
+    },
+
+    set(value: string) {
+        const limpio = value
+            .replace(/,/g, '')
+            .replace(/[^0-9.]/g, '')
+
+        const numero = parseFloat(limpio)
+
+        form.monthly_payment = isNaN(numero) ? undefined : numero
     },
 })
 
@@ -120,6 +144,18 @@ function submit(){
                         placeholder="Precio de condominio"
                     />
                     <InputError class="mt-1" :message="form.errors.price" />
+                </div>
+
+                <div class="grid gap-1">
+                    <Label for="monthly_payment">Mensualidad</Label>
+                    <Input
+                        id="monthly_payment"
+                        type="text"
+                        class="mt-1 block w-full"
+                        v-model="priceFormatted2"
+                        placeholder="Mensualidad de condominio"
+                    />
+                    <InputError class="mt-1" :message="form.errors.monthly_payment" />
                 </div>
 
                 <div class="grid gap-1">

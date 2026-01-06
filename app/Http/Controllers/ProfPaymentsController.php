@@ -55,6 +55,23 @@ class ProfPaymentsController extends Controller
         return redirect()->route('prof-payments.index');
     }
 
+    public function generateOrders(){
+        $condominiums = Condominiums::whereNotNull('id_client')->where('currency', Currency::USD)->get();
+
+        foreach($condominiums as $condominium){
+            ProfPayments::create([
+                'id_condominium'=>$condominium->id_condominium,
+                'amount'=>$condominium->monthly_payment,
+                'discount_condominium'=>0,
+                'currency'=>$condominium->currency,
+                'status'=>DocumentStatus::PENDIENTE,
+            ]);
+
+        }
+        
+        return redirect()->route('prof-payments.index');
+    }
+
     /**
      * Display the specified resource.
      */

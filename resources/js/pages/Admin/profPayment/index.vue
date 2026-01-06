@@ -10,6 +10,8 @@ import { formatCurrency } from '@/utils/formatCurrency';
 import { Pencil, Trash, Eye } from 'lucide-vue-next';
 import { formatDateTime } from '@/utils/formatDateTime'
 import { computed } from 'vue';
+import { Button } from '@/components/ui/button';
+import { Link } from '@inertiajs/vue3';
 
 const breadcrumbs: BreadcrumbItem[] = [{title:'Pagos', href:'#'}]
 const columnsName = ['Cliente', 'Monto', 'Pena', 'status', 'Fecha', 'Acciones'];
@@ -29,7 +31,13 @@ const pagination =computed(() => page.props.profPayments.links);
     <AppLayout :breadcrumbs="breadcrumbs">
 
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-            <ButtonNewRegister url="/prof-payments/create" text="Nueva prueba de pago"/>
+            <div class="flex gap-1">
+                <ButtonNewRegister url="/prof-payments/create" text="Nueva prueba de pago"/>
+
+                <Button as-child class="bg-blue-600  text-white hover:bg-blue-700">
+                    <Link href="/prof-payments/orders/create">Generar ordenes</Link>
+                </Button>
+            </div>
 
             <TableRecords caption="Lista de pruebas de pagos" :columns-head="columnsName">
                 <TableRow v-for="orderPayment in orderPayments":for="orderPayment.id">

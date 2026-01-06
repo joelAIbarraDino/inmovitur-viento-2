@@ -45,6 +45,7 @@ class CondominiumController extends Controller
             'tower'=>['required', new Enum(Tower::class)],
             'number'=>'required|string|unique:condominiums,number',
             'price'=>'required|numeric|min:0.0',
+            'monthly_payment'=>'required|numeric|min:0.0',
             'currency'=>['required', new Enum(Currency::class)],
         ]);
 
@@ -91,10 +92,12 @@ class CondominiumController extends Controller
             'tower'=>['required', new Enum(Tower::class)],
             'number'=>'required|string',
             'price'=>'required|numeric|min:0.0',
+            'monthly_payment'=>'required|numeric|min:0.0',
             'currency'=>['required', new Enum(Currency::class)],
         ]);
 
         $condominium->price = $request->price;
+        $condominium->monthly_payment = $request->monthly_payment;
         $condominium->id_client = $request->id_client;
         $condominium->save();
         

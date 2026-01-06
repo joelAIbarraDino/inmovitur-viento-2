@@ -22,7 +22,7 @@ const page = usePage();
 const isAdmin = computed(() => {
     const user = page.props.auth?.user;
     return user && user.roles && user.roles.length > 0
-        ? user.roles[0].name === 'admin'
+        ? user.roles[0].name === 'admin' || user.roles[0].name === 'supervisor'
         : false;
 });
 

@@ -8,9 +8,11 @@ import { TableCell, TableRow } from '@/components/ui/table';
 import { usePage, Head, router } from '@inertiajs/vue3';
 import { formatCurrency } from '@/utils/formatCurrency';
 import { Pencil, Trash, Eye } from 'lucide-vue-next';
+import { Link } from '@inertiajs/vue3';
 import { formatDateTime } from '@/utils/formatDateTime'
 import { computed } from 'vue';
 import Swal from 'sweetalert2';
+import { Button } from '@/components/ui/button';
 
 const breadcrumbs: BreadcrumbItem[] = [{title:'Pagos', href:'#'}]
 const columnsName = ['Cliente', 'Monto', 'Pena', 'status', 'Fecha'];
@@ -25,28 +27,6 @@ const pagination =computed(() => page.props.orderPayments.links);
 const flash = computed(()=>page.props.flash);
 
 
-const deletePayment = async(id:number)=>{
-    const result = await Swal.fire({
-        title: '¿Estás seguro?',
-        text: "¡No podrás revertir esto!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, eliminar',
-        cancelButtonText: 'Cancelar'
-    });
-
-    if(!result.isConfirmed)return;
-
-    router.delete(`/payments/${id}`, {
-        preserveScroll:true,
-        onSuccess:()=>{
-            Swal.fire('Resultado', flash.value.message, 'info');
-        },
-    });
-};
-
 </script>
 
 <template>
@@ -54,7 +34,14 @@ const deletePayment = async(id:number)=>{
     <AppLayout :breadcrumbs="breadcrumbs">
 
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-            <ButtonNewRegister url="/order-payments/create" text="Nueva orden de pago"/>
+
+            <div class="flex gap-1">
+                <ButtonNewRegister url="/order-payments/create" text="Nueva orden de pago"/>
+
+                <Button as-child class="bg-blue-600  text-white hover:bg-blue-700">
+                    <Link href="/order-payments/orders/create">Generar ordenes</Link>
+                </Button>
+            </div>
 
             <TableRecords caption="Lista de ordenes de pagos" :columns-head="columnsName">
                 <TableRow v-for="orderPayment in orderPayments":for="orderPayment.id">

@@ -27,10 +27,6 @@ class Clients extends Model
         'legal_personality'=>LegalPersonality::class,
         'marital_partnership'=>MaritalPartnership::class
     ];
-    
-    public function order_payments(){
-        return $this->hasMany(OrderPayments::class, 'id_client');
-    }
 
     public function documents(){
         return $this->hasMany(Documents::class, 'id_client');

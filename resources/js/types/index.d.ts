@@ -31,7 +31,7 @@ export type AppPageProps<
         rate:number;
         created_at:string;
     };
-    currency:string;
+    currencyView:string;
 };
 
 export interface User {
@@ -52,6 +52,7 @@ export interface Condominium{
     tower:string,
     number:string,
     price:number;
+    monthly_payment:number;
     currency:string;
     clients?:Client;
 }

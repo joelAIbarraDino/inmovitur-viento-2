@@ -8,7 +8,7 @@ import { TableActions, TablePagination, TableRecordButton, TableRecords } from '
 import { AppPageProps, BreadcrumbItem, Client } from '@/types';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { usePage, Head, router, Link } from '@inertiajs/vue3';
-import { Pencil, Trash, Eye, FilePenLine } from 'lucide-vue-next';
+import { Pencil, Trash, Eye, FilePenLine, FileSpreadsheet } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import Swal from 'sweetalert2';
 
@@ -98,7 +98,7 @@ const deleteClient = async(id:number)=>{
             <div class="flex gap-2 items-center">
                 <ButtonNewRegister url="/clients/create" text="Nuevo cliente"/>
                 
-                <div class="flex items-center space-x-2">
+                <div class="flex items-center space-x-1">
                     <input 
                         type="file" 
                         ref="fileInput" 
@@ -110,8 +110,9 @@ const deleteClient = async(id:number)=>{
                     <button 
                         @click="triggerImport" 
                         :disabled="processing"
-                        class="p-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
+                        class="p-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50 text-sm flex gap-2 items-center justify-center "
                     >
+                        <FileSpreadsheet :size="18"/>
                         <span v-if="processing">Procesando...</span>
                         <span v-else>Importar Excel</span>
                     </button>

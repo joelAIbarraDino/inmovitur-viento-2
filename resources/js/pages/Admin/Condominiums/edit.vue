@@ -36,6 +36,7 @@ const form = useForm({
     tower:condominium.value.tower,
     number:condominium.value.number,
     price:condominium.value.price as number | undefined,
+    monthly_payment:condominium.value.monthly_payment as number | undefined,
     currency:condominium.value.currency,
 
 });
@@ -60,6 +61,29 @@ const priceFormatted = computed({
         const numero = parseFloat(limpio)
 
         form.price = isNaN(numero) ? undefined : numero
+    },
+})
+
+const priceFormatted2 = computed({
+    get(): string {
+        if (form.monthly_payment === undefined || form.monthly_payment === null) {
+            return ''
+        }
+
+        return form.monthly_payment.toLocaleString('en-US', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+        })
+    },
+
+    set(value: string) {
+        const limpio = value
+            .replace(/,/g, '')
+            .replace(/[^0-9.]/g, '')
+
+        const numero = parseFloat(limpio)
+
+        form.monthly_payment = isNaN(numero) ? undefined : numero
     },
 })
 
@@ -129,6 +153,18 @@ function submit(){
                 </div>
 
                 <div class="grid gap-1">
+                    <Label for="monthly_payment">Mensualidad</Label>
+                    <Input
+                        id="monthly_payment"
+                        type="text"
+                        class="mt-1 block w-full"
+                        v-model="priceFormatted2"
+                        placeholder="Mensualidad de condominio"
+                    />
+                    <InputError class="mt-1" :message="form.errors.monthly_payment" />
+                </div>
+
+                <div class="grid gap-1">
                     <Label for="currency">Divisa de condominio</Label>
 
                     <Select v-model="form.currency" class="px-3 py-2 dark:text-white dark:bg-zinc-900" id="currency" :disabled="true">
@@ -169,7 +205,7 @@ function submit(){
 
                     </Select>
 
-                    <InputError class="mt-1" :message="form.errors.tower" />
+                    <InputError class="mt-1" :message="form.errors.id_client" />
                 </div>
 
                 <RecordFormSubmit v-if="edit"/>
