@@ -2,13 +2,14 @@
 
 import ButtonNewRegister from '@/components/ButtonNewRegister.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
+import axios from 'axios';
 
 import { TableActions, TablePagination, TableRecordButton, TableRecords } from '@/components/tableRecords';
 import { AppPageProps, BreadcrumbItem, Client } from '@/types';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { usePage, Head, router, Link } from '@inertiajs/vue3';
 import { Pencil, Trash, Eye, FilePenLine } from 'lucide-vue-next';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import Swal from 'sweetalert2';
 
 const breadcrumbs: BreadcrumbItem[] = [{title:'Clientes', href:'#'}]
@@ -22,6 +23,47 @@ const page = usePage<ClientsPageProps>();
 const clients = computed(() => page.props.clients.data);
 const pagination = computed(() => page.props.clients.links);
 const flash = computed(()=>page.props.flash);
+
+const fileInput = ref(null);
+const processing = ref(false);
+
+const triggerImport = () => {
+    fileInput.value.click();
+}
+
+const handleFileUpload = async (e)=>{
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    processing.value = true;
+
+    try {
+        // Importante: responseType 'blob' para manejar archivos
+        const response = await axios.post('/clients/import', formData, {
+            responseType: 'blob',
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+
+        // Crear un link temporal para disparar la descarga del Excel de respuesta
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'reporte_usuarios_creados.xlsx');
+        document.body.appendChild(link);
+        link.click();
+        
+        alert('Proceso completado. Revisa el reporte descargado.');
+    } catch (error) {
+        console.error("Error en la carga:", error);
+        alert('Hubo un error al procesar el archivo.');
+    } finally {
+        processing.value = false;
+        event.target.value = null; // Limpiar input
+    }
+} 
 
 const deleteClient = async(id:number)=>{
     const result = await Swal.fire({
@@ -52,7 +94,30 @@ const deleteClient = async(id:number)=>{
     <AppLayout :breadcrumbs="breadcrumbs">
 
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-            <ButtonNewRegister url="/clients/create" text="Nuevo cliente"/>
+
+            <div class="flex gap-2 items-center">
+                <ButtonNewRegister url="/clients/create" text="Nuevo cliente"/>
+                
+                <div class="flex items-center space-x-2">
+                    <input 
+                        type="file" 
+                        ref="fileInput" 
+                        class="hidden" 
+                        accept=".xlsx, .xls, .csv" 
+                        @change="handleFileUpload" 
+                    />
+    
+                    <button 
+                        @click="triggerImport" 
+                        :disabled="processing"
+                        class="p-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
+                    >
+                        <span v-if="processing">Procesando...</span>
+                        <span v-else>Importar Excel</span>
+                    </button>
+                </div>
+
+            </div>
 
             <TableRecords caption="Lista de clientes" :columns-head="columnsName">
                 <TableRow v-for="client in clients":for="client.id">

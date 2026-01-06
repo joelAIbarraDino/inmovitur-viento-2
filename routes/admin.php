@@ -16,6 +16,7 @@ Route::get('dashboard', [DashboardController::class, 'dashboard'])->middleware([
 Route::get('/towers', [TowerController::class, 'towerInformation'])->middleware('auth', 'verified')->name('tower.information');
 
 Route::resource('clients', ClientUserController::class)->middleware('auth', 'verified');
+Route::post('clients/import', [ClientUserController::class, 'importClients'])->middleware('auth', 'verified')->name('clients.import');
 Route::resource('supervisors', SupervisorUserController::class)->middleware('auth', 'verified');
 Route::resource('condominiums', CondominiumController::class)->middleware('auth', 'verified');
 Route::resource('payments', PaymentController::class)->middleware('auth', 'verified');

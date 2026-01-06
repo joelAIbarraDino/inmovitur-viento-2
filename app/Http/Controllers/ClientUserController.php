@@ -7,6 +7,8 @@ use App\Enums\DocumentType;
 use App\Enums\LegalPersonality;
 use App\Enums\MaritalPartnership;
 use App\Enums\Nacionality;
+use App\Exports\ClientsPasswordsExport;
+use App\Imports\ClientsImport;
 use App\Models\Clients;
 use App\Models\Documents;
 use App\Models\User;
@@ -17,6 +19,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ClientUserController extends Controller
 {
@@ -236,5 +239,21 @@ class ClientUserController extends Controller
             return redirect()->route('clients.index')->with('message', 'Documento actualizado con exito');
         }
             
+    }
+
+    public function importClients(Request $request){
+        $request->validate([
+            'file'=>'required|mimes:xlsx,xls'
+        ]);
+
+        $import = new ClientsImport;
+
+
+        Excel::import($import, $request->file('file'));
+
+        return Excel::download(
+            new ClientsPasswordsExport($import->importedData),
+            'usuarios registrados.xlsx'
+        );
     }
 }
