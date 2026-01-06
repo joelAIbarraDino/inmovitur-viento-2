@@ -39,7 +39,7 @@ class ComprobantePago extends FPDF{
         // Usamos public_path() para asegurar que encuentre el logo en cualquier entorno
         $logo = public_path('build/img/logo.png');
         if(file_exists($logo)){
-            $this->Image($logo, 10, 5, 40, 11);
+            $this->Image($logo, 10, 15, 40, 11);
         }
 
         $this->Ln(10);
