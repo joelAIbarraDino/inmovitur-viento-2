@@ -12,18 +12,18 @@ use App\Http\Controllers\ProfPaymentsController;
 use App\Http\Controllers\TowerController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('dashboard', [DashboardController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
-Route::get('/towers', [TowerController::class, 'towerInformation'])->middleware('auth', 'verified')->name('tower.information');
+Route::get('dashboard', [DashboardController::class, 'dashboard'])->middleware(['auth', 'role:admin', 'verified'])->name('dashboard');
+Route::get('towers', [TowerController::class, 'towerInformation'])->middleware('auth', 'role:admin', 'verified')->name('tower.information');
 
-Route::resource('clients', ClientUserController::class)->middleware('auth', 'verified');
-Route::post('clients/import', [ClientUserController::class, 'importClients'])->middleware('auth', 'verified')->name('clients.import');
-Route::resource('supervisors', SupervisorUserController::class)->middleware('auth', 'verified');
-Route::resource('condominiums', CondominiumController::class)->middleware('auth', 'verified');
-Route::resource('payments', PaymentController::class)->middleware('auth', 'verified');
-Route::resource('order-payments', OrderPaymentsController::class)->middleware('auth', 'verified');
-Route::resource('prof-payments', ProfPaymentsController::class)->middleware('auth', 'verified');
+Route::resource('clients', ClientUserController::class)->middleware('auth', 'role:admin', 'verified');
+Route::post('clients/import', [ClientUserController::class, 'importClients'])->middleware('auth', 'role:admin', 'verified')->name('clients.import');
+Route::resource('supervisors', SupervisorUserController::class)->middleware('auth', 'role:admin', 'verified');
+Route::resource('condominiums', CondominiumController::class)->middleware('auth', 'role:admin', 'verified');
+Route::resource('payments', PaymentController::class)->middleware('auth', 'role:admin', 'verified');
+Route::resource('order-payments', OrderPaymentsController::class)->middleware('auth', 'role:admin', 'verified');
+Route::resource('prof-payments', ProfPaymentsController::class)->middleware('auth', 'role:admin', 'verified');
 
-Route::middleware('auth', 'verified')->group(function(){
+Route::middleware('auth', 'role:admin', 'verified')->group(function(){
     
     //rutas para control de documentos
     Route::get('/documents/{document}', [DocumentController::class, 'show'])->name('documents.show');
