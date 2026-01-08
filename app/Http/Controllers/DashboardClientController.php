@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\ComprobantePago;
 use App\Enums\DocumentStatus;
 use App\Enums\DocumentType;
+use App\Enums\PaymentStatus;
 use App\Models\Badge;
 use App\Models\Clients;
 use App\Models\Condominiums;
@@ -24,9 +25,8 @@ class DashboardClientController extends Controller
         $client = Clients::where('id_user', $id)->get()->first();
         $condominium = Condominiums::where('id_client', $client->id)->get()->first();
         $payments = Payments::where('id_condominium', $condominium->id)->get();
-        $orderPayment = OrderPayments::where('id_condominium', $condominium->id)->where('status', 'pendiente')->get();
-
-        $profPayments = ProfPayments::where('id_condominium', $condominium->id)->where('status', 'pendiente')->get();
+        $orderPayment = OrderPayments::where('id_condominium', $condominium->id)->where('status', PaymentStatus::PENDING)->get();
+        $profPayments = ProfPayments::where('id_condominium', $condominium->id)->where('status', PaymentStatus::PENDING)->get();
         
         $charged = 0;
         $penality = 0;
