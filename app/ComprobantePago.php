@@ -9,7 +9,6 @@ class ComprobantePago extends FPDF{
     private $nombre;
     private $condominio;
     private $pagos;
-    private $dolar;
 
     public function __construct($nombre, $condominio, $pagos, $dolar) {
         parent::__construct();
@@ -37,7 +36,7 @@ class ComprobantePago extends FPDF{
         $this->AddPage('P','Letter');
 
         // Usamos public_path() para asegurar que encuentre el logo en cualquier entorno
-        $logo = public_path('build/img/logo.png');
+        $logo = public_path('images/logoViento.png');
         if(file_exists($logo)){
             $this->Image($logo, 10, 15, 40, 11);
         }
@@ -69,7 +68,7 @@ class ComprobantePago extends FPDF{
         $this->Cell(0, 10, 'Desglose de pagos', 0, 1, 'L');
 
         // Dimensiones de la tabla (ajustadas para que sumen el ancho útil de la página)
-        $columnWidths = [38, 38, 38, 38, 38];
+        $columnWidths = [33, 33, 33, 33, 33, 33];
         $tableWidth = array_sum($columnWidths);
         $marginLeft = ($this->GetPageWidth() - $tableWidth) / 2;
 
@@ -83,6 +82,7 @@ class ComprobantePago extends FPDF{
         $this->Cell($columnWidths[2], 10, 'Abono total', 1, 0, 'C', true);
         $this->Cell($columnWidths[3], 10, 'Saldo', 1, 0, 'C', true);
         $this->Cell($columnWidths[4], 10, 'Pena', 1, 0, 'C', true);
+        $this->Cell($columnWidths[4], 10, 'saldo - pena', 1, 0, 'C', true);
         $this->Ln();
 
         // Totales iniciales
@@ -109,7 +109,8 @@ class ComprobantePago extends FPDF{
             $this->Cell($columnWidths[1], 10, "$".number_format($pago->amount, 2), 1, 0, 'C', true);
             $this->Cell($columnWidths[2], 10, "$".number_format($totalPagado, 2), 1, 0, 'C', true);
             $this->Cell($columnWidths[3], 10, "$".number_format($saldoPendiente, 2), 1, 0, 'C', true);
-            $this->Cell($columnWidths[3], 10, "$".number_format($saldoPendiente - $pena, 2), 1, 0, 'C', true);
+            $this->Cell($columnWidths[4], 10, "$".number_format($pena, 2), 1, 0, 'C', true);
+            $this->Cell($columnWidths[5], 10, "$".number_format($saldoPendiente - $pena, 2), 1, 0, 'C', true);
             $saldoPendiente -= $pena;
             $this->Ln();
         }

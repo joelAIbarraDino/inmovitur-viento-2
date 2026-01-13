@@ -32,6 +32,7 @@ const pending = computed(()=>page.props.pending);
 const penality = computed(()=>page.props.penality);
 const currency = computed(()=>page.props.currency);
 const payments = computed(()=>page.props.payments);
+const showPenality = condominium.value.show_penality;
 const orderPayments = computed(()=>page.props.orderPayments);
 const profPayments = computed(()=>page.props.profPayments);
 
@@ -50,6 +51,7 @@ const profPayments = computed(()=>page.props.profPayments);
                     :pending="pending"
                     :penality="penality"
                     :currency="currency"
+                    :show-penality="showPenality"
                 />
             </div>
 
@@ -80,7 +82,7 @@ const profPayments = computed(()=>page.props.profPayments);
                 </div>
 
                 <div class="space-y-2">
-                    <h2 class="text-xl font-bold text-primary dark:text-white">Ordenes de pago</h2>
+                    <h2 class="text-xl font-bold text-primary dark:text-white">Orden de pago</h2>
                     <TableRecords v-if="condominium.currency==='usd'" caption="Lista de pagos" :columns-head="columnsName2">
                         <TableRow v-for="profPayment in profPayments":for="profPayment.id">
                             <TableCell>$ {{ formatCurrency(profPayment.amount) }} <span class="font-bold ">{{ profPayment.currency.toUpperCase() }}</span></TableCell>
@@ -90,7 +92,7 @@ const profPayments = computed(()=>page.props.profPayments);
                                 <a 
                                     :href="`prof-upload/${profPayment.id}`" 
                                     rel="noopener noreferrer"
-                                    class="text-primary hover:underline"
+                                    class="text-primary hover:underline dark:text-white"
                                 >
                                     subir comprobante
                                 </a>

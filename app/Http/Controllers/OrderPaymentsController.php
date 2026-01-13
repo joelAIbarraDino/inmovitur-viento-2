@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\Currency;
 use App\Enums\PaymentStatus;
+use App\Mail\OrderPayamentNotification;
 use App\Models\Clients;
 use App\Models\Condominiums;
 use App\Models\OrderPayments;
@@ -11,6 +12,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Stripe\Stripe;
@@ -25,7 +27,7 @@ class OrderPaymentsController extends Controller
     public function index()
     {
         return Inertia::render('Admin/orderPayment/index', [
-            'orderPayments' => OrderPayments::with('condominiums.clients.users')->paginate(10)
+            'orderPayments' => OrderPayments::with('condominiums.clients.users')->where('status', PaymentStatus::PENDING)->paginate(10)
         ]);
     }
 
@@ -52,6 +54,7 @@ class OrderPaymentsController extends Controller
 
         $condominium = Condominiums::find($request->id_condominium);
         $client = Clients::find($condominium->id_client)->load('users');
+        $user = $client->users;
 
         if(Currency::from($condominium->currency) == Currency::MXN){
             $response = $this->generateOpenPayOrder(
@@ -81,30 +84,11 @@ class OrderPaymentsController extends Controller
                 'status'=>PaymentStatus::PENDING,
                 'bank_name'=>$banco
             ]);
-        }
 
-        // if (Currency::from($condominium->currency) === Currency::USD) {
-        //     $stripeResponse = $this->generateStripeOrder(
-        //         $request->amount,
-        //         $client->no_contract,
-        //         $client->id,
-        //         'Pago de condominio #' . $condominium->number
-        //     );
-        //     $intent = $stripeResponse['intent'];
-        //     $instructions = $stripeResponse['bank_instructions'];
-            
-        //     OrderPayments::create([
-        //         'id_client' => $client->id,
-        //         'id_condominium' => $condominium->id,
-        //         'amount' => $request->amount,
-        //         'discount_condominium' => $request->discount_condominium,
-        //         'currency' => Currency::USD->value,
-        //         'order_id' => $intent->id,              // pi_xxx
-        //         'reference' => $instructions['reference'] ?? null,
-        //         'status' => PaymentStatus::PENDING,
-        //         'bank_name' => $instructions['bank_name'] ?? null,
-        //     ]);
-        // }
+            if($user->email){
+                Mail::to($user->email)->send(new OrderPayamentNotification($user->name, route('login')));
+            }
+        }
 
         return redirect()->route('order-payments.index');
 
@@ -116,6 +100,7 @@ class OrderPaymentsController extends Controller
 
         foreach($condominiums as $condominium){
             $client = Clients::find($condominium->id_client)->load('users');
+            $user = $client->users;
 
             $response = $this->generateOpenPayOrder(
                 $client->users->name, 
@@ -144,6 +129,10 @@ class OrderPaymentsController extends Controller
                 'status'=>PaymentStatus::PENDING,
                 'bank_name'=>$banco
             ]);
+
+            if($user->email){
+                Mail::to($user->email)->send(new OrderPayamentNotification($user->name, route('login')));
+            }
         }
 
         return redirect()->route('order-payments.index');
@@ -208,27 +197,5 @@ class OrderPaymentsController extends Controller
             Log::error('Excepción Openpay: ' . $e->getMessage());
             throw $e;
         }
-    }
-
-    private function generateStripeOrder(float $amount, string $contract, int $clientId,string $description): array {
-        Stripe::setApiKey(config('services.stripe.secret'));
-
-        $intent = PaymentIntent::create([
-            'amount' => (int) round($amount * 100), // centavos
-            'currency' => 'usd',
-            'payment_method_types' => ['us_bank_transfer'],
-            'description' => $description,
-            'metadata' => [
-                'contract' => $contract,
-                'client_id' => $clientId,
-                'provider' => 'stripe',
-            ],
-        ]);
-
-        return [
-            'intent' => $intent,
-            'bank_instructions' =>
-                $intent->next_action['display_bank_transfer_instructions'] ?? null,
-        ];
     }
 }

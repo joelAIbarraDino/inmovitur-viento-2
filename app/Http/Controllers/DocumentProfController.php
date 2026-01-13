@@ -36,25 +36,4 @@ class DocumentProfController extends Controller
         ]);
 
     }
-
-    public function updateStatus(Request $request, ProfPayments $profPayment){
-
-        $request->validate([
-            'status' => ['required', new Enum(DocumentStatus::class)],
-        ]);
-
-
-        $profPayment->update([
-            'status'=> $request->status
-        ]);
-
-        Payments::create([
-            'id_condominium'=>$profPayment->id_condominium,
-            'amount'=>$profPayment->amount,
-            'discount_condominium'=>$profPayment->discount_condominium,
-            'currency'=>$profPayment->currency
-        ]);
-
-        return back();
-    }
 }

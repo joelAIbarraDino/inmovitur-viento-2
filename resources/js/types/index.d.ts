@@ -54,6 +54,7 @@ export interface Condominium{
     price:number;
     monthly_payment:number;
     currency:string;
+    show_penality:boolean;
     clients?:Client;
 }
 

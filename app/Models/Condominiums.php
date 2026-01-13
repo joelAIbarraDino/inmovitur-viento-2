@@ -12,7 +12,8 @@ class Condominiums extends Model
         'number',
         'price',
         'monthly_payment',
-        'currency'
+        'currency',
+        'show_penality'
     ];
 
     public function payments(){
@@ -30,4 +31,8 @@ class Condominiums extends Model
     public function profPayments(){
         return $this->hasMany(ProfPayments::class, 'id_condominium');
     }
+
+    protected $casts = [
+        'show_penality' => 'boolean',
+    ];
 }

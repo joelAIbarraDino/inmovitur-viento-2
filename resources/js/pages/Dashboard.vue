@@ -27,7 +27,7 @@ const towers = computed(()=>page.props.towers);
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex flex-wrap flex-col md:flex-row items-center justify-evenly w-full md:w-9/10  mx-auto py-20 px-5 space-y-20 md:space-y-0">
-            <TowerCard v-for="tower in towers":key="tower.towerName" v-bind="tower"/>
+            <TowerCard v-for="tower in towers":key="tower.towerName" v-bind="tower" :show-penality="true" :is-admin="true"/>
         </div>
     </AppLayout>
 </template>

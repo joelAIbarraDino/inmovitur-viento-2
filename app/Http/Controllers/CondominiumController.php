@@ -47,6 +47,7 @@ class CondominiumController extends Controller
             'price'=>'required|numeric|min:0.0',
             'monthly_payment'=>'required|numeric|min:0.0',
             'currency'=>['required', new Enum(Currency::class)],
+            'show_penality'=>'required|boolean',
         ]);
 
         Condominiums::create($request->all());
@@ -94,10 +95,12 @@ class CondominiumController extends Controller
             'price'=>'required|numeric|min:0.0',
             'monthly_payment'=>'required|numeric|min:0.0',
             'currency'=>['required', new Enum(Currency::class)],
+            'show_penality'=>'required|boolean',
         ]);
 
         $condominium->price = $request->price;
         $condominium->monthly_payment = $request->monthly_payment;
+        $condominium->show_penality = $request->show_penality;
         $condominium->id_client = $request->id_client;
         $condominium->save();
         

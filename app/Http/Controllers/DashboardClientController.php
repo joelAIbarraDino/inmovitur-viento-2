@@ -187,7 +187,7 @@ class DashboardClientController extends Controller
         $profPayment->update([
             'original_name' => $request->file('file')->getClientOriginalName(),
             'stored_name' => basename($path),
-            'status' => DocumentStatus::REVISION,
+            'status' => PaymentStatus::PENDING,
             'path' => $path,
         ]);
 

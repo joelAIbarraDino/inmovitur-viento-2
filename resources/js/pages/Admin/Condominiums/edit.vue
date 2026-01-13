@@ -8,6 +8,7 @@ import { AppPageProps, BreadcrumbItem, Client, Condominium, enums } from '@/type
 import { RecordForm, RecordFormBody, RecordFormHeader, RecordFormSubmit } from '@/components/recordForm';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { computed } from 'vue';
+import { Checkbox } from '@/components/ui/checkbox';
 import { LoadingOverlay } from '@/components/overlay';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -38,6 +39,7 @@ const form = useForm({
     price:condominium.value.price as number | undefined,
     monthly_payment:condominium.value.monthly_payment as number | undefined,
     currency:condominium.value.currency,
+    show_penality:Boolean(condominium.value.show_penality),
 
 });
 
@@ -208,6 +210,19 @@ function submit(){
                     <InputError class="mt-1" :message="form.errors.id_client" />
                 </div>
 
+                <Label class="hover:bg-accent/50 flex items-start gap-3 rounded-lg border p-3 has-[[aria-checked=true]]:border-orange-600 has-[[aria-checked=true]]:bg-orange-50 dark:has-[[aria-checked=true]]:border-orange-900 dark:has-[[aria-checked=true]]:bg-orange-950">
+                    <Checkbox
+                        id="show_penality"
+                        v-model="form.show_penality"
+                        @update:checked="(value:boolean) => form.show_penality = value"
+                        class="data-[state=checked]:border-orange-600 data-[state=checked]:bg-orange-600 data-[state=checked]:text-white dark:data-[state=checked]:border-orange-700 dark:data-[state=checked]:bg-orange-700"
+                    />
+                    <div class="grid gap-1.5 font-normal">
+                        <p class="text-sm leading-none font-medium">Mostrar penas al cliente</p>
+                        <p class="text-muted-foreground text-sm">Puedes editar o deshabilitar esta opcion en cualquier momento</p>
+                    </div>
+                </Label>
+                
                 <RecordFormSubmit v-if="edit"/>
             </RecordFormBody>
         </RecordForm>

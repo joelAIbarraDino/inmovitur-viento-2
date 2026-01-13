@@ -38,5 +38,4 @@ Route::middleware('auth', 'role:admin|supervisor', 'verified')->group(function()
 
     Route::get('/profDocument/{profPayment}', [DocumentProfController::class, 'show'])->name('profDocument.show');
     Route::get('/profDocument/{profPayment}/stream', [DocumentProfController::class, 'stream'])->name('profDocument.stream');
-    Route::patch('/profDocument/{profPayment}/status', [DocumentProfController::class, 'updateStatus'])->name('profDocument.update-status');
 });

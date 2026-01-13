@@ -12,7 +12,6 @@ Route::get('/', function () {
 
 Route::post('/currency', [CurrencyController::class, 'set'])->name('currency.set');
 Route::post('/webhooks/openpay', [OpenPayWebhookController::class, 'handle']);
-Route::post('/webhooks/stripe', [StripeWebhookController::class, 'handle']);
 
 
 Route::get('/new-client', [NewClientController::class, 'validateFormClient']);

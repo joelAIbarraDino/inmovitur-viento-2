@@ -5,6 +5,7 @@ namespace App\Enums;
 enum PaymentStatus:string
 {
     case COMPLETED = "completed";
+    case REVISION = "revision";
     case PENDING = "pending";
 
     public static function options(): array

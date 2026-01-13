@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Currency;
-use App\Enums\DocumentStatus;
+use App\Enums\PaymentStatus;
+use App\Mail\OrderPayamentNotification;
 use App\Models\Condominiums;
+use App\Models\Payments;
 use App\Models\ProfPayments;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 
 class ProfPaymentsController extends Controller
@@ -17,7 +20,7 @@ class ProfPaymentsController extends Controller
     public function index()
     {
         return Inertia::render('Admin/profPayment/index', [
-            'profPayments'=>ProfPayments::with('condominiums.clients.users')->paginate(10)
+            'profPayments'=>ProfPayments::with('condominiums.clients.users')->where('status', PaymentStatus::PENDING)->paginate(10)
         ]);
     }
 
@@ -49,23 +52,29 @@ class ProfPaymentsController extends Controller
             'amount'=>$request->amount,
             'discount_condominium'=>$request->discount_condominium,
             'currency'=>$condominium->currency,
-            'status'=>DocumentStatus::PENDIENTE,
+            'status'=>PaymentStatus::PENDING,
         ]);
 
         return redirect()->route('prof-payments.index');
     }
 
     public function generateOrders(){
-        $condominiums = Condominiums::whereNotNull('id_client')->where('currency', Currency::USD)->get();
+        $condominiums = Condominiums::whereNotNull('id_client')->where('currency', Currency::USD)->with('clients.users')->get();
 
         foreach($condominiums as $condominium){
             ProfPayments::create([
-                'id_condominium'=>$condominium->id_condominium,
+                'id_condominium'=>$condominium->id,
                 'amount'=>$condominium->monthly_payment,
                 'discount_condominium'=>0,
                 'currency'=>$condominium->currency,
-                'status'=>DocumentStatus::PENDIENTE,
+                'status'=>PaymentStatus::PENDING,
             ]);
+
+            $user = $condominium->clients->users;
+
+            if($user->email){
+                Mail::to($user->email)->send(new OrderPayamentNotification($user->name, route('login')));
+            }
 
         }
         
@@ -91,9 +100,25 @@ class ProfPaymentsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, ProfPayments $profPayment)
     {
-        //
+        $request->validate([
+            'amount'=>'required|numeric',
+        ]);
+
+        $profPayment->update([
+            'amount'=> $request->amount,
+            'status'=> PaymentStatus::COMPLETED,
+        ]);
+
+        Payments::create([
+            'id_condominium'=>$profPayment->id_condominium,
+            'amount'=>$profPayment->amount,
+            'discount_condominium'=>$profPayment->discount_condominium,
+            'currency'=>$profPayment->currency
+        ]);
+
+        return redirect()->route('prof-payments.index')->with('message', 'Pago aceptado y registrado con exito');
     }
 
     /**
@@ -103,4 +128,5 @@ class ProfPaymentsController extends Controller
     {
         //
     }
+    
 }
