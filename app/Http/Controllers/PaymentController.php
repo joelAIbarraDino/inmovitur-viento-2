@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Currency;
+use App\Imports\PaymentsImport;
 use App\Models\Condominiums;
 use App\Models\Payments;
 use Illuminate\Http\Request;
@@ -55,34 +56,34 @@ class PaymentController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+
+    public function destroy(Payments $payment)
     {
-        //
+        $payment->delete();
+        return redirect()->route('payments.index');
+    }
+
+    public function importPaymnents(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv'
+        ]);
+
+        $import = new PaymentsImport;
+        $import->import($request->file('file'));
+
+        $failures = $import->failures();
+        $total = $import->getTotalRows();
+        $inserted = $import->getRowCount();
+        $ignored = $total - $inserted;
+
+        return back()->with('import_result', [
+            'total' => $total,
+            'inserted' => $inserted,
+            'ignored'  => $ignored,
+            'rows'     => $failures->map(fn($f) => $f->row())->values()->all(),
+        ]);
     }
 }

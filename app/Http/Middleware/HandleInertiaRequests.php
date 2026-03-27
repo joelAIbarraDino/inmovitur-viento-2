@@ -50,7 +50,8 @@ class HandleInertiaRequests extends Middleware
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'flash' => [
-                'message' => fn () => $request->session()->get('message')
+                'message' => fn () => $request->session()->get('message'),
+                'import_result' => fn () => $request->session()->get('import_result'),
             ],
             'exchange' => function () {
                 $badge = Badge::latest('created_at')->first(['rate', 'created_at']);

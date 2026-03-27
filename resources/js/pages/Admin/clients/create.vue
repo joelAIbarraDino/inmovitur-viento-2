@@ -41,7 +41,7 @@ const form = useForm({
 
 const handleFileChange = (event: { target: { files: null[]; }; }) => {
   form.contract = event.target.files[0];
-  form.errors.contract = ''; // Limpiar mensaje anterior
+  form.errors.contract = '';
 };
 
 function submit(){

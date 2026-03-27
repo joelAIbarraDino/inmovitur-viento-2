@@ -20,6 +20,7 @@ Route::post('clients/import', [ClientUserController::class, 'importClients'])->m
 Route::resource('supervisors', SupervisorUserController::class)->middleware('auth', 'role:admin|supervisor', 'verified');
 Route::resource('condominiums', CondominiumController::class)->middleware('auth', 'role:admin|supervisor', 'verified');
 Route::resource('payments', PaymentController::class)->middleware('auth', 'role:admin|supervisor', 'verified');
+Route::post('payments/import', [PaymentController::class, 'importPaymnents'])->middleware('auth', 'role:admin|supervisor', 'verified')->name('payments.import');
 Route::resource('order-payments', OrderPaymentsController::class)->middleware('auth', 'role:admin|supervisor', 'verified');
 Route::get('order-payments/orders/create', [OrderPaymentsController::class, 'generateOrders'])->middleware('auth', 'role:admin|supervisor', 'verified');
 

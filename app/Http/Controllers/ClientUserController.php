@@ -244,7 +244,6 @@ class ClientUserController extends Controller
 
         $import = new ClientsImport;
 
-
         Excel::import($import, $request->file('file'));
 
         return Excel::download(

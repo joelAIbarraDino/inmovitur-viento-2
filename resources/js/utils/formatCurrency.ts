@@ -1,6 +1,6 @@
 export function formatCurrency(
     value: number | null | undefined,
-    locale = 'en-US',
+    locale = 'es-MX',
     currency?: string
 ): string {
     if (value === null || value === undefined) return '-'

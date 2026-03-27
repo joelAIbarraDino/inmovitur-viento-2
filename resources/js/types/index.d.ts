@@ -26,6 +26,13 @@ export type AppPageProps<
     sidebarOpen: boolean;
     flash: {
         message: string;
+
+        import_result?: {
+            total: number;
+            inserted: number;
+            ignored: number;
+            rows: number[];
+        };
     };
     exchange: {
         rate:number;

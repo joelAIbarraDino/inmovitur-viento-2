@@ -31,8 +31,8 @@ const triggerImport = () => {
     fileInput.value.click();
 }
 
-const handleFileUpload = async (e)=>{
-    const file = event.target.files[0];
+const handleFileUpload = async (e:any)=>{
+    const file = e.target.files[0];
     if (!file) return;
 
     const formData = new FormData();
@@ -61,7 +61,7 @@ const handleFileUpload = async (e)=>{
         alert('Hubo un error al procesar el archivo.');
     } finally {
         processing.value = false;
-        event.target.value = null; // Limpiar input
+        e.target.value = null; // Limpiar input
     }
 } 
 

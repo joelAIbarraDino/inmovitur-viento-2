@@ -50,7 +50,15 @@ class CondominiumController extends Controller
             'show_penality'=>'required|boolean',
         ]);
 
-        Condominiums::create($request->all());
+        Condominiums::create([
+            'id_client'=>$request->id_client,
+            'tower'=>$request->tower,
+            'number'=>strtoupper($request->number),
+            'price'=>$request->price,
+            'monthly_payment'=>$request->monthly_payment,
+            'currency'=>$request->currency,
+            'show_penality'=>$request->show_penality
+        ]);
 
         return redirect()->route('condominiums.index');
     }
