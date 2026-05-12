@@ -43,6 +43,11 @@ const mainNavItems: NavItem[] = [
         icon: User,
     },
     {
+        title: 'Buscar clientes',
+        href: '/search-client',
+        icon: UserSearch,
+    },
+    {
         title: 'Condominios',
         href: '/condominiums',
         icon: DoorOpen,

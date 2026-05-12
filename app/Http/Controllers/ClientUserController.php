@@ -10,7 +10,9 @@ use App\Enums\Nacionality;
 use App\Exports\ClientsPasswordsExport;
 use App\Imports\ClientsImport;
 use App\Models\Clients;
+use App\Models\Condominiums;
 use App\Models\Documents;
+use App\Models\Payments;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,6 +22,8 @@ use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
 use Maatwebsite\Excel\Facades\Excel;
+
+use function Pest\Laravel\json;
 
 class ClientUserController extends Controller
 {
@@ -237,7 +241,8 @@ class ClientUserController extends Controller
             
     }
 
-    public function importClients(Request $request){
+    public function importClients(Request $request)
+    {
         $request->validate([
             'file'=>'required|mimes:xlsx,xls'
         ]);
@@ -250,5 +255,69 @@ class ClientUserController extends Controller
             new ClientsPasswordsExport($import->importedData),
             'usuarios registrados.xlsx'
         );
+    }
+
+    public function search()
+    {
+        return Inertia::render('Admin/clients/search', [
+            'cliente' => null,
+            'condominio'=> null,
+            'pagos'=>[],
+            'valor_condominio' => 0,
+            'moneda_condominio' => null,
+            'pagado' => 0
+        ]);
+    }
+
+    public function query(Request $request)
+    {
+        $regex = "/^(A|B|C)\\d{2,3}$/";
+        $request->validate([
+            'q' => 'required|string'
+        ]);
+
+        $valor = strtoupper($request->q);
+        $condomino = null;
+        $pagado = 0;
+
+        if(preg_match($regex, $valor)){
+            $condomino = Condominiums::where('number', $valor)->first();
+            
+            if(!$condomino)
+                return Inertia::render('Admin/clients/search', [
+                    'result_client'=>[]
+                ]);
+
+            $client = Clients::where('id', $condomino->id_client)->with('users')->first();    
+
+        }else{
+            $likeName = $valor.'%';
+            
+            $user = User::where('name', 'like', $likeName)->first('id');
+            if(!$user)
+                return Inertia::render('Admin/clients/search', [
+                    'result_client'=>[]
+                ]);
+
+            $client = Clients::where('id_user', $user->id)->with('users')->first();
+            $condomino = Condominiums::where('id_client', $client->id)->first();
+        }
+
+        $pagos = Payments::where('id_condominium', $condomino->id)->get();
+
+        $pagado = $pagos->sum('amount');
+        $penas = $pagos->sum('discount_condominium');
+        $pediente = $condomino->price - $pagado;
+        
+        return Inertia::render('Admin/clients/search', [
+            'cliente' => $client,
+            'condominio'=> $condomino,
+            'pagos'=>$pagos,
+            'valor_condominio' => $condomino->price,
+            'moneda_condominio' => $condomino->currency,
+            'pagado' => $pagado,
+            'pendiente' =>$pediente,
+            'penas' => $penas
+        ]);
     }
 }

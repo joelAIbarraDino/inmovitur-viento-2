@@ -27,6 +27,9 @@ Route::get('order-payments/orders/create', [OrderPaymentsController::class, 'gen
 Route::resource('prof-payments', ProfPaymentsController::class)->middleware('auth', 'role:admin|supervisor', 'verified');
 Route::get('prof-payments/orders/create', [ProfPaymentsController::class, 'generateOrders'])->middleware('auth', 'role:admin|supervisor', 'verified');
 
+Route::get('search-client', [ClientUserController::class, 'search'])->middleware('auth', 'role:admin|supervisor', 'verified');
+Route::get('query-client', [ClientUserController::class, 'query'])->middleware('auth', 'role:admin|supervisor', 'verified');
+
 Route::middleware('auth', 'role:admin|supervisor', 'verified')->group(function(){
     
     //rutas para control de documentos
