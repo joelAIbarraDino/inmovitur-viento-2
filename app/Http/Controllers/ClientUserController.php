@@ -265,7 +265,9 @@ class ClientUserController extends Controller
             'pagos'=>[],
             'valor_condominio' => 0,
             'moneda_condominio' => null,
-            'pagado' => 0
+            'pagado' => 0,
+            'pendiente' =>0,
+            'penas' => 0
         ]);
     }
 
@@ -285,7 +287,14 @@ class ClientUserController extends Controller
             
             if(!$condomino)
                 return Inertia::render('Admin/clients/search', [
-                    'result_client'=>[]
+                    'cliente' => null,
+                    'condominio'=> null,
+                    'pagos'=>[],
+                    'valor_condominio' => 0,
+                    'moneda_condominio' => null,
+                    'pagado' => 0,
+                    'pendiente' =>0,
+                    'penas' => 0
                 ]);
 
             $client = Clients::where('id', $condomino->id_client)->with('users')->first();    
@@ -296,11 +305,30 @@ class ClientUserController extends Controller
             $user = User::where('name', 'like', $likeName)->first('id');
             if(!$user)
                 return Inertia::render('Admin/clients/search', [
-                    'result_client'=>[]
+                    'cliente' => null,
+                    'condominio'=> null,
+                    'pagos'=>[],
+                    'valor_condominio' => 0,
+                    'moneda_condominio' => null,
+                    'pagado' => 0,
+                    'pendiente' =>0,
+                    'penas' => 0
                 ]);
 
             $client = Clients::where('id_user', $user->id)->with('users')->first();
             $condomino = Condominiums::where('id_client', $client->id)->first();
+
+            if(!$condomino || !$client)
+                return Inertia::render('Admin/clients/search', [
+                    'cliente' => null,
+                    'condominio'=> null,
+                    'pagos'=>[],
+                    'valor_condominio' => 0,
+                    'moneda_condominio' => null,
+                    'pagado' => 0,
+                    'pendiente' =>0,
+                    'penas' => 0
+                ]);
         }
 
         $pagos = Payments::where('id_condominium', $condomino->id)->get();

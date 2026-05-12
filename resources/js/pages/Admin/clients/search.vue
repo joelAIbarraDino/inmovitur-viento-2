@@ -78,7 +78,7 @@ const search = (e:any) => {
                 </Empty>
             </div>
 
-            <div v-else class="border p-4 rounded-md">
+            <div v-else class="flex-1 border p-4 rounded-md overflow-auto">
                 <p class="text-xl">Nombre de cliente: <span class="font-bold">{{ cliente.users?.name }}</span></p>
                 <div class="flex flex-col md:flex-row items-start justify-start md:justify-evenly w-full md:w-9/10 mx-auto py-20 px-5">
                     
