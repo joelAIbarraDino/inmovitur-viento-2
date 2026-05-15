@@ -43,7 +43,7 @@ const mainNavItems: NavItem[] = [
         icon: User,
     },
     {
-        title: 'Buscar clientes',
+        title: 'Buscar clientes y condominios',
         href: '/search-client',
         icon: UserSearch,
     },
